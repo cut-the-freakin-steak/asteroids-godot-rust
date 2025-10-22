@@ -1,0 +1,24 @@
+[build]
+# Per-target config:
+[target.x86_64-unknown-linux-gnu]
+# on Linux host, this is usually the native toolchain, so maybe nothing needed
+
+[target.aarch64-unknown-linux-gnu]
+linker = "aarch64-linux-gnu-gcc"
+ar = "aarch64-linux-gnu-ar"
+
+[target.x86_64-apple-darwin]
+linker = "/usr/local/osxcross/bin/o64-clang"
+ar = "/usr/local/osxcross/bin/o64-ar"
+
+[target.aarch64-apple-darwin]
+linker = "/usr/local/osxcross/bin/aarch64-apple-darwin-clang"
+ar = "/usr/local/osxcross/bin/aarch64-apple-darwin-ar"
+
+[target.x86_64-pc-windows-gnu]
+linker = "x86_64-w64-mingw32-gcc"
+ar = "x86_64-w64-mingw32-ar"
+
+# You could also add rustflags per-target if needed
+#[target.x86_64-apple-darwin]
+#rustflags = ["-C", "some-flag"]

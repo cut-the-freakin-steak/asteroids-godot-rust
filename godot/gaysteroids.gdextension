@@ -1,0 +1,15 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.1
+reloadable = true
+
+[libraries]
+# building for only the platform im currently working on
+# linux.debug.x86_64 =     "res://../rust/target/debug/libgaysteroids.so"
+macos.debug.arm64 =      "res://../rust/target/debug/libgaysteroids.dylib"
+
+# building for releasing on multiple platforms
+# linux.release.x86_64 =   "res://../rust/target/release/libgaysteroids.so"
+# macos.release.arm64 =    "res://../rust/target/release/libgaysteroids.dylib"
+# macos.release =          "res://../rust/target/release/libgaysteroids.dylib"
+# windows.release.x86_64 = "res://../rust/target/release/gaysteroids.dll"
