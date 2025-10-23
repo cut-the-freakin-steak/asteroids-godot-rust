@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{97aa9861-5f0e-4953-92e6-e391e31613f0}">
+		<property name="assetPath">
+			<value>sfx/weird-route-cancel.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>2.1600000000000001</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{74f6b11e-d204-4db3-8a4d-69f892f99773}</destination>
+		</relationship>
+	</object>
+</objects>

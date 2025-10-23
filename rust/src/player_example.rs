@@ -1,35 +1,53 @@
-use std::f64;
-
-use godot::classes::{ISprite2D, Sprite2D};
+use godot::classes::{
+    Area2D, CollisionPolygon2D, GpuParticles2D, IArea2D, Marker2D, Node, Sprite2D, Timer,
+};
 use godot::prelude::*;
 
 #[derive(GodotClass)]
-#[class(base=Sprite2D)]
-struct Player {
-    speed: f64,
-    angular_speed: f64,
+#[class(base=Area2D)]
+struct Asteroid {
+    // base
+    base: Base<Area2D>,
 
-    base: Base<Sprite2D>,
+    // onready
+    main: OnReady<Node>,
+
+    sprite: OnReady<Sprite2D>,
+    collision: OnReady<CollisionPolygon2D>,
+    explosion_parts: OnReady<GpuParticles2D>,
+    explosion_to_queue_free: OnReady<Timer>,
+
+    // normal vars
+    direction: Vector2,
+    vertical_speed: f64,
+    horizontal_speed: f64,
+    use_set_position: bool,
 }
 
 #[godot_api]
-impl ISprite2D for Player {
-    fn init(base: Base<Sprite2D>) -> Self {
-        godot_print!("Hello, world!"); // prints to godot console
-
+impl IArea2D for Asteroid {
+    fn init(base: Base<Area2D>) -> Self {
         Self {
-            speed: 400.0,
-            angular_speed: f64::consts::PI,
             base,
+
+            main: OnReady::manual(),
+
+            sprite: OnReady::manual(),
+            collision: OnReady::manual(),
+            explosion_parts: OnReady::manual(),
+            explosion_to_queue_free: OnReady::manual(),
+
+            direction: Vector2 { x: 0.0, y: 0.0 },
+            vertical_speed: 0.0,
+            horizontal_speed: 0.0,
+            use_set_position: false,
         }
     }
 
-    fn physics_process(&mut self, delta: f64) {
-        // in gdscript this would be:
-        // rotation += angular_speed * delta
-        let radians = (self.angular_speed * delta) as f32;
-        self.base_mut().rotate(radians);
-        // the 'rotate' method requires an f32
-        // therefore we convert 'self.angular_speed * delta', which is an f64 by default
+    fn ready(&mut self) {
+        // onready node declarations
+        self.manual.init(self.base.get_node_as())
     }
+
+    fn physics_process(&mut self, delta: f64) {}
 }

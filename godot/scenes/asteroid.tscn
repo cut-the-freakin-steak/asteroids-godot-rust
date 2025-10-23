@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxqs2041ri3py"]
+
+[ext_resource type="Script" uid="uid://cgnx2cehhifog" path="res://scripts/asteroid.gd" id="1_akfqu"]
+
+[node name="Asteroid" type="Area2D" groups=["asteroid"]]
+script = ExtResource("1_akfqu")
+metadata/_custom_type_script = "uid://cgnx2cehhifog"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+
+[node name="AsteroidExplosion" type="GPUParticles2D" parent="."]
+
+[node name="ExplosionToQueueFree" type="Timer" parent="."]
+wait_time = 0.5
+
+[connection signal="timeout" from="ExplosionToQueueFree" to="." method="_on_explosion_to_queue_free_timeout"]

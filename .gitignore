@@ -3,3 +3,5 @@
 /godot/android/
 
 /rust/target/
+
+.DS_Store

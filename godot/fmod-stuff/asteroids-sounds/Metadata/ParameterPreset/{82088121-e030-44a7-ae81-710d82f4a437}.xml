@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="ParameterPreset" id="{82088121-e030-44a7-ae81-710d82f4a437}">
+		<property name="name">
+			<value>MuffledOrNot</value>
+		</property>
+		<relationship name="folder">
+			<destination>{fd0a92ee-f848-4da1-8109-d83550b4b6cd}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{59616bf4-e3fe-4971-bed6-4c09f29d077f}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{59616bf4-e3fe-4971-bed6-4c09f29d077f}">
+		<property name="initialValue">
+			<value>1</value>
+		</property>
+		<relationship name="modulators">
+			<destination>{57bd8636-0c98-48d3-847d-dd3069cdeea4}</destination>
+		</relationship>
+	</object>
+	<object class="SeekModulator" id="{57bd8636-0c98-48d3-847d-dd3069cdeea4}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>cursorPosition</value>
+		</property>
+		<property name="speedAscending">
+			<value>1.3000000715255737</value>
+		</property>
+	</object>
+</objects>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="ParameterPreset" id="{b31e349c-4910-464c-9adf-c1e8ce74ccc2}">
+		<property name="name">
+			<value>HPRemaining</value>
+		</property>
+		<relationship name="folder">
+			<destination>{fd0a92ee-f848-4da1-8109-d83550b4b6cd}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{0fcfda9a-e50e-4188-8f2d-d91ddc40dbf0}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{0fcfda9a-e50e-4188-8f2d-d91ddc40dbf0}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>2</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>Alive</value>
+			<value>Dead</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>

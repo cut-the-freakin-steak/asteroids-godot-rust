@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="ParameterPreset" id="{ae4f16aa-88f0-46fe-bc8c-ce1dac73f120}">
+		<property name="name">
+			<value>NormalGameplaySongPitch</value>
+		</property>
+		<relationship name="folder">
+			<destination>{fd0a92ee-f848-4da1-8109-d83550b4b6cd}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{ee2001b9-6aa7-4a17-9dcb-87ae3709f4c5}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{ee2001b9-6aa7-4a17-9dcb-87ae3709f4c5}">
+		<property name="minimum">
+			<value>-1</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+		<relationship name="modulators">
+			<destination>{a30cd252-1916-4e1c-a7b7-ab9b6f70c9b6}</destination>
+		</relationship>
+	</object>
+	<object class="SeekModulator" id="{a30cd252-1916-4e1c-a7b7-ab9b6f70c9b6}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>cursorPosition</value>
+		</property>
+		<property name="speedDescending">
+			<value>0.72999995946884155</value>
+		</property>
+		<property name="asymmetric">
+			<value>true</value>
+		</property>
+	</object>
+</objects>

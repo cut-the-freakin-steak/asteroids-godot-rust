@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="ParameterPreset" id="{7538e31b-d9c6-41ed-b31b-fdc480342af6}">
+		<property name="name">
+			<value>IsFirstLoop</value>
+		</property>
+		<relationship name="folder">
+			<destination>{fd0a92ee-f848-4da1-8109-d83550b4b6cd}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{83b6b645-7c1b-46c8-bebc-1dcf6b51587b}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{83b6b645-7c1b-46c8-bebc-1dcf6b51587b}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>2</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>No</value>
+			<value>Yes</value>
+		</property>
+		<property name="initialValue">
+			<value>1</value>
+		</property>
+	</object>
+</objects>

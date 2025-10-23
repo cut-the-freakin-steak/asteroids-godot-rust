@@ -1,0 +1,74 @@
+[gd_scene load_steps=9 format=3 uid="uid://dxsu0lyfisjgy"]
+
+[ext_resource type="Script" uid="uid://djrfljkaic70n" path="res://scripts/player.gd" id="1_3vyb7"]
+[ext_resource type="Texture2D" uid="uid://bfxgp3dt64uc6" path="res://assets/sprites/player.png" id="2_g2els"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_g2els"]
+
+[sub_resource type="Curve" id="Curve_g2els"]
+_limits = [0.0, 10.0, 0.0, 1.0]
+_data = [Vector2(0, 0.984582), 0.0, 0.0, 0, 0, Vector2(0.499049, 3.36355), 0.0, 0.0, 0, 0, Vector2(1, 4.33278), -1.41734, 0.0, 0, 0]
+point_count = 3
+metadata/_snap_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_g2els"]
+curve = SubResource("Curve_g2els")
+
+[sub_resource type="Gradient" id="Gradient_g2els"]
+colors = PackedColorArray(0.421134, 0.421134, 0.421134, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qhqgy"]
+gradient = SubResource("Gradient_g2els")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g2els"]
+lifetime_randomness = 0.2
+particle_flag_disable_z = true
+angle_min = 1.07288e-05
+angle_max = 75.0
+angle_curve = SubResource("CurveTexture_g2els")
+spread = 90.0
+initial_velocity_min = -40.0
+initial_velocity_max = -20.0
+gravity = Vector3(0, 0, 0)
+scale_min = 1.5
+scale_max = 3.5
+color = Color(1, 0.811765, 0.270588, 1)
+color_initial_ramp = SubResource("GradientTexture1D_qhqgy")
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "back_particles", "i_frame_timer", "shoot_timer") groups=["player"]]
+script = ExtResource("1_3vyb7")
+sprite = NodePath("Sprite2D")
+back_particles = NodePath("BackFireParticles")
+i_frame_timer = NodePath("IFrameTimer")
+shoot_timer = NodePath("ShootTimer")
+
+[node name="BackFireParticles" type="GPUParticles2D" parent="."]
+position = Vector2(-1, 0)
+emitting = false
+amount = 50
+amount_ratio = 0.85
+texture = SubResource("CanvasTexture_g2els")
+lifetime = 0.21
+trail_lifetime = 1.0
+process_material = SubResource("ParticleProcessMaterial_g2els")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5708
+texture = ExtResource("2_g2els")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+rotation = 1.5708
+polygon = PackedVector2Array(-1.81e-05, -5, 4, -1.00001, 5.00001, 3.99998, 2.00001, 2.99999, -1.99999, 3.00001, -4.99999, 4.00002, -4, -0.999986)
+
+[node name="ShootOrigin" type="Marker2D" parent="."]
+position = Vector2(5, 0)
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 0.18
+one_shot = true
+
+[node name="IFrameTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="timeout" from="IFrameTimer" to="." method="_on_i_frame_timer_timeout"]

@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://c84auvfixbxf5"]
+
+[ext_resource type="Script" uid="uid://ce263noasy2kb" path="res://scripts/audio/music.gd" id="1_tn5dr"]
+
+[node name="MusicManager" type="Node2D" node_paths=PackedStringArray("gameplay", "title_theme")]
+script = ExtResource("1_tn5dr")
+gameplay = NodePath("Gameplay")
+title_theme = NodePath("TitleTheme")
+
+[node name="Gameplay" type="FmodEventEmitter2D" parent="."]
+event_name = "event:/Music/GameplayMusic"
+event_guid = "{b9086e76-b2df-4441-bca4-792ee7c8007c}"
+attached = false
+fmod_parameters/WhichGameplaySong/id = -3234776517951222507
+fmod_parameters/WhichGameplaySong = "Normal"
+fmod_parameters/WhichGameplaySong/labels = PackedStringArray("Normal", "Hurricane", "GameOver")
+fmod_parameters/WhichGameplaySong/variant_type = 4
+fmod_parameters/MuffledOrNot/id = -1900543537792726589
+fmod_parameters/MuffledOrNot = 1.0
+fmod_parameters/MuffledOrNot/variant_type = 3
+fmod_parameters/NormalGameplaySongPitch/id = -6692436821590987855
+fmod_parameters/NormalGameplaySongPitch = 0.0
+fmod_parameters/NormalGameplaySongPitch/variant_type = 3
+
+[node name="TitleTheme" type="FmodEventEmitter2D" parent="."]
+event_name = "event:/Music/TitleScreen"
+event_guid = "{f3ae978d-05b9-4c25-8972-426dae722c30}"
+attached = false

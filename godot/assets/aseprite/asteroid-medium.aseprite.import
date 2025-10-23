@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://ituga877suki"
+path="res://.godot/imported/asteroid-medium.aseprite-56fc60f152726fbbd5982c0c4a661656.res"
+
+[deps]
+
+source_file="res://assets/aseprite/asteroid-medium.aseprite"
+dest_files=["res://.godot/imported/asteroid-medium.aseprite-56fc60f152726fbbd5982c0c4a661656.res"]
+
+[params]
+

@@ -1,0 +1,73 @@
+[gd_scene load_steps=13 format=3 uid="uid://j5d1ef3sn3p3"]
+
+[ext_resource type="Texture2D" uid="uid://c0ol6hnl03wm0" path="res://assets/sprites/asteroid-small.png" id="1_23cm1"]
+[ext_resource type="Script" uid="uid://cp3bhecd07bxt" path="res://scripts/asteroid-small.gd" id="1_q5apu"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_q5apu"]
+
+[sub_resource type="Curve" id="Curve_sm8gn"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.798984, 0.910991), 0.0, 0.0, 0, 0, Vector2(1, 0.24754), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_y25gk"]
+curve = SubResource("Curve_sm8gn")
+
+[sub_resource type="Curve" id="Curve_m5w82"]
+_limits = [0.0, 10.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.493086, 3.27321), 0.0, 0.0, 0, 0, Vector2(1, 4.56809), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_l5glv"]
+curve = SubResource("Curve_m5w82")
+
+[sub_resource type="Gradient" id="Gradient_41gsb"]
+colors = PackedColorArray(0.686297, 0.686297, 0.686297, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_eoqba"]
+gradient = SubResource("Gradient_41gsb")
+
+[sub_resource type="Gradient" id="Gradient_t52iw"]
+offsets = PackedFloat32Array(0, 0.256091, 0.509714, 0.741598, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.835957, 0.833527, 0.10596, 1, 0.863418, 0.540161, 9.62615e-07, 1, 1, 0.236192, 0.242918, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qncy5"]
+gradient = SubResource("Gradient_t52iw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nfeng"]
+particle_flag_disable_z = true
+angle_min = 1.07288e-05
+angle_max = 75.0
+angle_curve = SubResource("CurveTexture_l5glv")
+spread = 180.0
+initial_velocity_min = 15.0
+initial_velocity_max = 35.0
+gravity = Vector3(0, 0, 0)
+scale_max = 1.5
+color_ramp = SubResource("GradientTexture1D_qncy5")
+color_initial_ramp = SubResource("GradientTexture1D_eoqba")
+alpha_curve = SubResource("CurveTexture_y25gk")
+
+[node name="SmallAsteroid" type="Area2D" groups=["asteroid"]]
+script = ExtResource("1_q5apu")
+metadata/_custom_type_script = "uid://cgnx2cehhifog"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_23cm1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-3, -7, 7, 2, -5, 6)
+
+[node name="AsteroidExplosion" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 125
+amount_ratio = 0.8
+texture = SubResource("CanvasTexture_q5apu")
+lifetime = 0.25
+one_shot = true
+explosiveness = 0.7
+process_material = SubResource("ParticleProcessMaterial_nfeng")
+
+[node name="ExplosionToQueueFree" type="Timer" parent="."]
+wait_time = 0.8
+
+[connection signal="timeout" from="ExplosionToQueueFree" to="." method="_on_explosion_to_queue_free_timeout"]

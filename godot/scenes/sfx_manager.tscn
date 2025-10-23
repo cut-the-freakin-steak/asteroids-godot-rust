@@ -1,0 +1,60 @@
+[gd_scene load_steps=2 format=3 uid="uid://ro4si7messfm"]
+
+[ext_resource type="Script" uid="uid://doapjseheg0x6" path="res://scripts/audio/sfx.gd" id="1_wd8mt"]
+
+[node name="SFXManager" type="Node2D" node_paths=PackedStringArray("click", "explosion", "ship_thruster", "laser_shot", "player_hurt", "splash_screen")]
+script = ExtResource("1_wd8mt")
+click = NodePath("Click")
+explosion = NodePath("Explosion")
+ship_thruster = NodePath("ShipThruster")
+laser_shot = NodePath("LaserShot")
+player_hurt = NodePath("PlayerHurt")
+splash_screen = NodePath("SplashScreen")
+
+[node name="Click" type="FmodEventEmitter2D" parent="."]
+event_name = "event:/SFX/ButtonClick"
+event_guid = "{3c356a64-c24e-43c9-9683-14a7cae0fd82}"
+attached = false
+
+[node name="Explosion" type="FmodEventEmitter2D" parent="."]
+event_name = "event:/SFX/AsteroidsExploding"
+event_guid = "{6e64ee53-982b-4c7e-8bc8-5700670c51fe}"
+attached = false
+fmod_parameters/WhichSound/id = -2015208891237255017
+fmod_parameters/WhichSound = "Big"
+fmod_parameters/WhichSound/labels = PackedStringArray("SmallMed", "Big")
+fmod_parameters/WhichSound/variant_type = 4
+
+[node name="ShipThruster" type="FmodEventEmitter2D" parent="."]
+event_name = "event:/SFX/ShipThrusters"
+event_guid = "{672d0473-ec35-4b0f-a2f1-4a2cf42c36ac}"
+attached = false
+fmod_parameters/PitchParam/id = -4137752462533614050
+fmod_parameters/PitchParam = 0.0
+fmod_parameters/PitchParam/variant_type = 3
+fmod_parameters/ShouldLoop/id = 6697081798805990338
+fmod_parameters/ShouldLoop = "Yes"
+fmod_parameters/ShouldLoop/labels = PackedStringArray("No", "Yes")
+fmod_parameters/ShouldLoop/variant_type = 4
+
+[node name="LaserShot" type="FmodEventEmitter2D" parent="."]
+event_name = "event:/SFX/LaserShot"
+event_guid = "{6bc098ea-2383-4a09-b83f-f290bb246b07}"
+attached = false
+fmod_parameters/PitchParam/id = -4137752462533614050
+fmod_parameters/PitchParam = 0.0
+fmod_parameters/PitchParam/variant_type = 3
+
+[node name="PlayerHurt" type="FmodEventEmitter2D" parent="."]
+event_name = "event:/SFX/PlayerHurt"
+event_guid = "{f1633b40-b573-4032-a0c6-10ff684b966f}"
+attached = false
+fmod_parameters/HPRemaining/id = -7333900606764071335
+fmod_parameters/HPRemaining = "MoreThanOne"
+fmod_parameters/HPRemaining/labels = PackedStringArray("MoreThanOne", "One")
+fmod_parameters/HPRemaining/variant_type = 4
+
+[node name="SplashScreen" type="FmodEventEmitter2D" parent="."]
+event_name = "event:/SFX/SplashScreen"
+event_guid = "{7ec103af-433d-4ef7-9685-69e66ac5c550}"
+attached = false

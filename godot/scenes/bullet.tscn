@@ -1,0 +1,76 @@
+[gd_scene load_steps=14 format=3 uid="uid://nn82a84m2gp2"]
+
+[ext_resource type="Texture2D" uid="uid://ddaunji8gn6gm" path="res://assets/sprites/bullet.png" id="1_mkf8s"]
+[ext_resource type="Script" uid="uid://b0tti0lsmu2ou" path="res://scripts/bullet.gd" id="1_y25gk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y25gk"]
+size = Vector2(4, 5)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_y25gk"]
+
+[sub_resource type="Curve" id="Curve_l5glv"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.798984, 0.910991), 0.0, 0.0, 0, 0, Vector2(1, 0.24754), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_y25gk"]
+curve = SubResource("Curve_l5glv")
+
+[sub_resource type="Curve" id="Curve_y25gk"]
+_limits = [0.0, 10.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.493086, 3.27321), 0.0, 0.0, 0, 0, Vector2(1, 4.56809), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_l5glv"]
+curve = SubResource("Curve_y25gk")
+
+[sub_resource type="Gradient" id="Gradient_y25gk"]
+colors = PackedColorArray(0.686297, 0.686297, 0.686297, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_eoqba"]
+gradient = SubResource("Gradient_y25gk")
+
+[sub_resource type="Gradient" id="Gradient_eoqba"]
+offsets = PackedFloat32Array(0, 0.256091, 0.509714, 0.741598, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.835957, 0.833527, 0.10596, 1, 0.863418, 0.540161, 9.62615e-07, 1, 1, 0.236192, 0.242918, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qncy5"]
+gradient = SubResource("Gradient_eoqba")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y25gk"]
+particle_flag_disable_z = true
+angle_min = 1.07288e-05
+angle_max = 75.0
+angle_curve = SubResource("CurveTexture_l5glv")
+spread = 180.0
+initial_velocity_min = 15.0
+initial_velocity_max = 65.0
+gravity = Vector3(0, 0, 0)
+scale_max = 1.5
+color_ramp = SubResource("GradientTexture1D_qncy5")
+color_initial_ramp = SubResource("GradientTexture1D_eoqba")
+alpha_curve = SubResource("CurveTexture_y25gk")
+
+[node name="Bullet" type="CharacterBody2D"]
+script = ExtResource("1_y25gk")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_mkf8s")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_y25gk")
+
+[node name="Explosion" type="GPUParticles2D" parent="."]
+position = Vector2(0, -2)
+emitting = false
+amount = 200
+amount_ratio = 0.8
+texture = SubResource("CanvasTexture_y25gk")
+lifetime = 0.25
+one_shot = true
+explosiveness = 0.7
+process_material = SubResource("ParticleProcessMaterial_y25gk")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
