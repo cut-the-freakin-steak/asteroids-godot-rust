@@ -1,5 +1,5 @@
 use godot::prelude::*;
-mod player_example;
+mod asteroid;
 
 struct MyExtension;
 

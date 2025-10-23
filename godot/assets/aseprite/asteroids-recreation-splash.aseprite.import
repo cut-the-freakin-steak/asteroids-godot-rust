@@ -3,12 +3,11 @@
 importer="aseprite_wizard.plugin.spriteframes"
 type="SpriteFrames"
 uid="uid://kfi5lv3ombxg"
-path="res://.godot/imported/asteroids-recreation-splash.aseprite-4c8d5401829c040e35aba0eec49659da.res"
+valid=false
 
 [deps]
 
 source_file="res://assets/aseprite/asteroids-recreation-splash.aseprite"
-dest_files=["res://.godot/imported/asteroids-recreation-splash.aseprite-4c8d5401829c040e35aba0eec49659da.res"]
 
 [params]
 
