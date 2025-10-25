@@ -1,7 +1,7 @@
 use godot::classes::{
     Area2D, CollisionPolygon2D, GpuParticles2D, IArea2D, Marker2D, Node, Sprite2D, Timer,
 };
-use godot::global::{randi, randomize};
+use godot::global::{randi, randi_range, randomize};
 use godot::prelude::*;
 
 #[derive(GodotClass)]
@@ -31,7 +31,7 @@ struct Asteroid {
     direction: Vector2,
 
     #[init(val = 0.0)]
-    vertical_speed: f64,
+    vertical_speed: f32,
 
     #[init(val = 0.0)]
     horizontal_speed: f64,
@@ -66,7 +66,7 @@ impl IArea2D for Asteroid {
                 .get_children();
 
             let selected_asteroid_spawn = asteroid_markers
-                .get((randi() as usize) % asteroid_markers.len())
+                .get(randi() as usize % asteroid_markers.len())
                 .unwrap() // an invalid state here is irrepresentable.
                 .cast::<Marker2D>();
 
@@ -81,9 +81,34 @@ impl IArea2D for Asteroid {
             self.direction.x = -1.0;
         } else {
             let ones = array![-1.0, 1.0];
-            self.direction.x = ones.get((randi() as usize) % ones.len()).unwrap();
+            self.direction.x = ones.get(randi() as usize % ones.len()).unwrap();
         }
+
+        if position.y <= 50.0 {
+            self.direction.y = 1.0;
+        } else if position.y >= 150.0 {
+            self.direction.y = -1.0;
+        } else {
+            let ones = array![-1.0, 1.0];
+            self.direction.y = ones.get(randi() as usize % ones.len()).unwrap();
+        }
+
+        let vert_speed_coin_flip = randi_range(0, 1);
+        if vert_speed_coin_flip == 0 {
+            self.vertical_speed = randi_range(20, 30) as f32 * self.direction.y;
+        } else {
+            self.vertical_speed = randi_range(35, 45) as f32 * self.direction.y;
+        }
+        self.base()
+            .signals()
+            .body_entered()
+            .connect(Self::on_body_entered);
     }
 
     fn physics_process(&mut self, delta: f64) {}
+}
+
+#[godot_api]
+impl Asteroid {
+    fn on_body_entered(body: Gd<Node2D>) {}
 }
