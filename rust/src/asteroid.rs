@@ -102,7 +102,7 @@ impl IArea2D for Asteroid {
         self.base()
             .signals()
             .body_entered()
-            .connect(Self::on_body_entered);
+            .connect_other(self, Self::on_body_entered);
     }
 
     fn physics_process(&mut self, delta: f64) {}
@@ -110,5 +110,5 @@ impl IArea2D for Asteroid {
 
 #[godot_api]
 impl Asteroid {
-    fn on_body_entered(body: Gd<Node2D>) {}
+    fn on_body_entered(self, body: Gd<Node2D>) {}
 }
