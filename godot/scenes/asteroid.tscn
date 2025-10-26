@@ -1,10 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cxqs2041ri3py"]
+[gd_scene format=3 uid="uid://cxqs2041ri3py"]
 
-[ext_resource type="Script" uid="uid://cgnx2cehhifog" path="res://scripts/asteroid.gd" id="1_akfqu"]
-
-[node name="Asteroid" type="Area2D" groups=["asteroid"]]
-script = ExtResource("1_akfqu")
-metadata/_custom_type_script = "uid://cgnx2cehhifog"
+[node name="Asteroid" type="Asteroid" groups=["asteroid"]]
+position = Vector2(-1, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 
