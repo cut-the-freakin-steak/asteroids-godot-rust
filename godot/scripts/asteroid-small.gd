@@ -1,4 +1,4 @@
-extends Asteroid
+extends Asteroid_GDS
 
 var rotation_speed: int = randi_range(4, 5)
 

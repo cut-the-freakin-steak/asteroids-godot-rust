@@ -47,9 +47,6 @@ color_initial_ramp = SubResource("GradientTexture1D_qhqgy")
 
 [sub_resource type="Resource" id="Resource_choun"]
 script = ExtResource("6_85g3d")
-duration = 1.0
-transition = 0
-ease = 2
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ya4ey"]
 light_mode = 1
@@ -369,13 +366,13 @@ cache/0/50/0/glyphs/69/size = Vector2(22, 35)
 cache/0/50/0/glyphs/69/uv_rect = Rect2(168, 37, 22, 35)
 cache/0/50/0/glyphs/69/texture_idx = 0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_eb6dy"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_trceg"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jkv2x"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a8y0u"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jkv2x"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_trceg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_eb6dy"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_trceg"]
 light_mode = 1
@@ -655,13 +652,13 @@ cache/0/50/0/glyphs/69/size = Vector2(22, 35)
 cache/0/50/0/glyphs/69/uv_rect = Rect2(168, 37, 22, 35)
 cache/0/50/0/glyphs/69/texture_idx = 0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jbj1t"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_muem4"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0ld40"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dp3eg"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0ld40"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_muem4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jbj1t"]
 
 [sub_resource type="Animation" id="Animation_jkv2x"]
 length = 0.001
@@ -1086,23 +1083,23 @@ font_size = 40
 font = ExtResource("4_jyhfs")
 font_size = 20
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jyhfs"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tipki"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tbgi4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_choun"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tbgi4"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tipki"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tefeu"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_85g3d"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ya4ey"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jyhfs"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o6xl0"]
 
-[node name="Main" type="Node2D"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ya4ey"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_85g3d"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tefeu"]
+
+[node name="Main" type="Node2D" groups=["main_scene"]]
 script = ExtResource("1_o5qli")
 
 [node name="AsteroidMarkers" type="Node" parent="."]
@@ -1245,10 +1242,10 @@ anchor_bottom = 2.55
 pivot_offset = Vector2(52, 23)
 theme_override_fonts/font = SubResource("FontFile_ya4ey")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/focus = SubResource("StyleBoxEmpty_eb6dy")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_trceg")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_a8y0u")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_jkv2x")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_a8y0u")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_trceg")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_eb6dy")
 disabled = true
 text = "resume"
 metadata/_edit_use_anchors_ = true
@@ -1264,10 +1261,10 @@ anchor_bottom = 3.725
 pivot_offset = Vector2(52, 23)
 theme_override_fonts/font = SubResource("FontFile_ya4ey")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/focus = SubResource("StyleBoxEmpty_eb6dy")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_trceg")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_a8y0u")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_jkv2x")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_a8y0u")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_trceg")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_eb6dy")
 disabled = true
 text = "settings"
 metadata/_edit_use_anchors_ = true
@@ -1283,10 +1280,10 @@ anchor_bottom = 4.875
 pivot_offset = Vector2(56, 23)
 theme_override_fonts/font = SubResource("FontFile_jkv2x")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/focus = SubResource("StyleBoxEmpty_jbj1t")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_muem4")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_dp3eg")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_0ld40")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_dp3eg")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_muem4")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jbj1t")
 disabled = true
 text = "main menu"
 metadata/_edit_use_anchors_ = true
@@ -1353,9 +1350,9 @@ libraries = {
 visible = false
 layout_mode = 0
 offset_left = 32.0
-offset_top = 72.0
+offset_top = 17.0
 offset_right = 165.0
-offset_bottom = 122.0
+offset_bottom = 67.0
 text = "you die"
 label_settings = SubResource("LabelSettings_tipki")
 horizontal_alignment = 1
@@ -1383,10 +1380,10 @@ offset_bottom = 124.0
 pivot_offset = Vector2(52, 23)
 theme_override_fonts/font = ExtResource("4_jyhfs")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/focus = SubResource("StyleBoxEmpty_jyhfs")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_tipki")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_choun")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_tbgi4")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_choun")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_tipki")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jyhfs")
 text = "try again"
 metadata/_edit_use_anchors_ = true
 
@@ -1400,10 +1397,10 @@ offset_bottom = 172.0
 pivot_offset = Vector2(56, 23)
 theme_override_fonts/font = ExtResource("4_jyhfs")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/focus = SubResource("StyleBoxEmpty_tefeu")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_85g3d")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_ya4ey")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_o6xl0")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_ya4ey")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_85g3d")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tefeu")
 text = "main menu"
 metadata/_edit_use_anchors_ = true
 

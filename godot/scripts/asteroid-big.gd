@@ -1,4 +1,4 @@
-extends Asteroid
+extends Asteroid_GDS
 
 var camera_manager: Node
 var rotation_speed: int = randi_range(1, 2)

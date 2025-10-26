@@ -1,5 +1,5 @@
 extends Area2D
-class_name Asteroid
+class_name Asteroid_GDS
 
 @onready var main: Node = get_tree().current_scene
 

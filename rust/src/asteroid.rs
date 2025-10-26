@@ -1,3 +1,5 @@
+// NOTE: done with this file
+
 use godot::classes::{
     Area2D, CollisionPolygon2D, GpuParticles2D, IArea2D, Marker2D, Node, Sprite2D, Timer,
 };
@@ -64,8 +66,6 @@ impl IArea2D for Asteroid {
         if !self.use_set_position {
             let asteroid_markers = self
                 .main
-                .cast::<main_scene::Main>()
-                .base()
                 .get_node_as::<Node>("AsteroidMarkers")
                 .get_children();
 
@@ -110,8 +110,30 @@ impl IArea2D for Asteroid {
     }
 
     fn physics_process(&mut self, delta: f64) {
-        if self.main.is_in_group("main_scene") {
-            self.main.is_paused
+        if self.main.is_in_group("main_scene") && self.main.bind().is_paused {
+            return;
+        }
+
+        let position = self.base().get_position();
+
+        // use a scope to limit vert_speed since i dont want it cluttering stuff up
+        // outside of this operation
+        {
+            // we have to do this because since we're using base_mut(), we cant access
+            // self.vertical_speed while doing set_position() cause borrow checker :3
+            let vert_speed = self.vertical_speed;
+            self.base_mut().set_position(Vector2 {
+                x: position.x,
+                y: position.y + vert_speed * delta as f32,
+            });
+        }
+
+        if position.x > 250.0 || position.x < -50.0 {
+            self.base_mut().queue_free();
+        }
+
+        if position.y > 250.0 || position.y < -50.0 {
+            self.base_mut().queue_free();
         }
     }
 }
