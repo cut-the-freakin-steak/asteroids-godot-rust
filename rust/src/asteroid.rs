@@ -4,15 +4,17 @@ use godot::classes::{
 use godot::global::{randi, randi_range, randomize};
 use godot::prelude::*;
 
+use crate::main_scene;
+use crate::player;
+
 #[derive(GodotClass)]
 #[class(init, base = Area2D)]
 struct Asteroid {
-    // base
     base: Base<Area2D>,
 
     // onready
     #[init(val = OnReady::manual())]
-    main: OnReady<Gd<Node>>,
+    main: OnReady<Gd<main_scene::Main>>,
 
     #[init(node = "Sprite2D")]
     sprite: OnReady<Gd<Sprite2D>>,
@@ -48,7 +50,7 @@ impl IArea2D for Asteroid {
         let main_scene;
         match self.base().get_tree() {
             Some(tree) => match tree.get_current_scene() {
-                Some(main) => main_scene = main,
+                Some(main) => main_scene = main.cast::<main_scene::Main>(),
                 None => panic!(),
             },
             None => panic!(),
@@ -62,6 +64,8 @@ impl IArea2D for Asteroid {
         if !self.use_set_position {
             let asteroid_markers = self
                 .main
+                .cast::<main_scene::Main>()
+                .base()
                 .get_node_as::<Node>("AsteroidMarkers")
                 .get_children();
 
@@ -105,10 +109,26 @@ impl IArea2D for Asteroid {
             .connect_other(self, Self::on_body_entered);
     }
 
-    fn physics_process(&mut self, delta: f64) {}
+    fn physics_process(&mut self, delta: f64) {
+        if self.main.is_in_group("main_scene") {
+            self.main.is_paused
+        }
+    }
 }
 
 #[godot_api]
 impl Asteroid {
-    fn on_body_entered(self, body: Gd<Node2D>) {}
+    #[func]
+    fn on_body_entered(&mut self, body: Gd<Node2D>) {
+        if body.is_in_group("player") {
+            // FIX: figure out a way to make ts type safe
+            // NOTE: ^ figured it out :3
+            // something very interesting about this is that it's actually
+            // *safer* than gdscript, since signals are typed in godot-rust
+
+            // invalid state irrepresentable here, so a simple cast is just fine
+            let real_body = body.cast::<player::Player>();
+            real_body.signals().damage_taken().emit();
+        }
+    }
 }
