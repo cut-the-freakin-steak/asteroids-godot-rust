@@ -6,12 +6,11 @@ use godot::classes::{
 use godot::global::{randi, randi_range, randomize};
 use godot::prelude::*;
 
-use crate::main_scene;
-use crate::player;
+use crate::{main_scene, player};
 
 #[derive(GodotClass)]
 #[class(init, base = Area2D)]
-struct Asteroid {
+pub struct Asteroid {
     base: Base<Area2D>,
 
     // onready
@@ -38,15 +37,22 @@ struct Asteroid {
     vertical_speed: f32,
 
     #[init(val = 0.0)]
-    horizontal_speed: f64,
+    horizontal_speed: f32,
 
     #[init(val = false)]
     use_set_position: bool,
+
+    #[init(val = 0)]
+    rotation_speed: i32,
 }
 
-#[godot_api]
-impl IArea2D for Asteroid {
-    fn ready(&mut self) {
+pub trait AsteroidIFunctions {
+    fn asteroid_ready(&mut self) {}
+    fn asteroid_physics_process(&mut self, _delta: f64) {}
+}
+
+impl AsteroidIFunctions for Asteroid {
+    fn asteroid_ready(&mut self) {
         // NOTE: getting the scene tree and then current scene is a bit more
         // complicated in rust than in gdscript lmao
         let main_scene;
@@ -109,7 +115,7 @@ impl IArea2D for Asteroid {
             .connect_other(self, Self::on_body_entered);
     }
 
-    fn physics_process(&mut self, delta: f64) {
+    fn asteroid_physics_process(&mut self, delta: f64) {
         if self.main.is_in_group("main_scene") && self.main.bind().is_paused {
             return;
         }
@@ -139,9 +145,21 @@ impl IArea2D for Asteroid {
 }
 
 #[godot_api]
+impl IArea2D for Asteroid {
+    fn ready(&mut self) {
+        self.asteroid_ready();
+    }
+
+    fn physics_process(&mut self, delta: f64) {
+        self.asteroid_physics_process(delta);
+    }
+}
+
+#[godot_api]
 impl Asteroid {
+    // NOTE: signal connection
     #[func]
-    fn on_body_entered(&mut self, body: Gd<Node2D>) {
+    pub fn on_body_entered(&mut self, body: Gd<Node2D>) {
         if body.is_in_group("player") {
             // FIX: figure out a way to make ts type safe
             // NOTE: ^ figured it out :3
@@ -154,3 +172,5 @@ impl Asteroid {
         }
     }
 }
+
+pub trait IsAsteroid {}
