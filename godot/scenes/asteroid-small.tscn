@@ -47,9 +47,10 @@ color_ramp = SubResource("GradientTexture1D_qncy5")
 color_initial_ramp = SubResource("GradientTexture1D_eoqba")
 alpha_curve = SubResource("CurveTexture_y25gk")
 
-[node name="SmallAsteroid" type="Area2D" groups=["asteroid"]]
+[node name="SmallAsteroid" type="SmallAsteroid" groups=["asteroid"]]
 script = ExtResource("1_q5apu")
-metadata/_custom_type_script = "uid://cgnx2cehhifog"
+
+[node name="Asteroid" type="Asteroid" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_23cm1")
@@ -69,5 +70,3 @@ process_material = SubResource("ParticleProcessMaterial_nfeng")
 
 [node name="ExplosionToQueueFree" type="Timer" parent="."]
 wait_time = 0.8
-
-[connection signal="timeout" from="ExplosionToQueueFree" to="." method="_on_explosion_to_queue_free_timeout"]

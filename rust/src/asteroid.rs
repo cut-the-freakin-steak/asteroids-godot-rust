@@ -11,39 +11,39 @@ use crate::{main_scene, player};
 #[derive(GodotClass)]
 #[class(init, base = Area2D)]
 pub struct Asteroid {
-    base: Base<Area2D>,
+    pub base: Base<Area2D>,
 
     // onready
     #[init(val = OnReady::manual())]
-    main: OnReady<Gd<main_scene::Main>>,
+    pub main: OnReady<Gd<main_scene::Main>>,
 
-    #[init(node = "Sprite2D")]
-    sprite: OnReady<Gd<Sprite2D>>,
+    #[init(node = "../Sprite2D")]
+    pub sprite: OnReady<Gd<Sprite2D>>,
 
-    #[init(node = "CollisionPolygon2D")]
-    collision: OnReady<Gd<CollisionPolygon2D>>,
+    #[init(node = "../CollisionPolygon2D")]
+    pub collision: OnReady<Gd<CollisionPolygon2D>>,
 
-    #[init(node = "AsteroidExplosion")]
-    explosion_parts: OnReady<Gd<GpuParticles2D>>,
+    #[init(node = "../AsteroidExplosion")]
+    pub explosion_parts: OnReady<Gd<GpuParticles2D>>,
 
-    #[init(node = "ExplosionToQueueFree")]
-    explosion_to_queue_free: OnReady<Gd<Timer>>,
+    #[init(node = "../ExplosionToQueueFree")]
+    pub explosion_to_queue_free: OnReady<Gd<Timer>>,
 
     // normal vars
     #[init(val = Vector2::ZERO)]
-    direction: Vector2,
+    pub direction: Vector2,
 
     #[init(val = 0.0)]
-    vertical_speed: f32,
+    pub vertical_speed: f32,
 
     #[init(val = 0.0)]
-    horizontal_speed: f32,
+    pub horizontal_speed: f32,
 
     #[init(val = false)]
-    use_set_position: bool,
+    pub use_set_position: bool,
 
     #[init(val = 0)]
-    rotation_speed: i32,
+    pub rotation_speed: i32,
 }
 
 pub trait AsteroidIFunctions {
@@ -172,5 +172,3 @@ impl Asteroid {
         }
     }
 }
-
-pub trait IsAsteroid {}

@@ -5,7 +5,6 @@ var rotation_speed: int = randi_range(1, 2)
 
 func _ready() -> void:
 	super()
-	randomize()
 	horizontal_speed = randi_range(15, 30) * direction.x
 
 	if main.name == "Main":
