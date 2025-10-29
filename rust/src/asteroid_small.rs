@@ -16,18 +16,24 @@ struct SmallAsteroid {
 #[godot_api]
 impl IArea2D for SmallAsteroid {
     fn ready(&mut self) {
-        {
-            let mut ast_base = self.ast_base.bind_mut();
-            ast_base.asteroid_ready(); // super
+        let mut ast_base = self.ast_base.bind_mut();
+        ast_base.asteroid_ready(); // super
 
-            ast_base.horizontal_speed = randi_range(40, 55) as f32 * ast_base.direction.x
-        }
-        let position = self.ast_base.get_position();
-        self.ast_base.set_position(Vector2 { x: self.ast_base.get_position(), y:  });
+        ast_base.horizontal_speed = randi_range(40, 55) as f32 * ast_base.direction.x
     }
 
     fn physics_process(&mut self, delta: f64) {
-        let mut ast_base = self.ast_base.bind_mut();
-        ast_base.asteroid_physics_process(delta); // super
+        {
+            let mut ast_base_bind = self.ast_base.bind_mut();
+            ast_base_bind.asteroid_physics_process(delta); // super
+        }
+        {
+            let position = self.ast_base.get_position();
+            let horizontal_speed = self.ast_base.bind();
+            self.ast_base.set_position(Vector2 {
+                x: position.x * delta as f32,
+                y: position.y,
+            });
+        }
     }
 }
