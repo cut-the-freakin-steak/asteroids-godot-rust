@@ -17,7 +17,7 @@ func _physics_process(delta: float) -> void:
 	rotation += rotation_speed * delta
 
 	position.x += horizontal_speed * delta
-	
+
 
 func split_in_two() -> void:
 	main.score += 3
