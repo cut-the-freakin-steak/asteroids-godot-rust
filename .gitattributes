@@ -3,7 +3,4 @@
 addons/fmod/libs/**/*.a filter=lfs diff=lfs merge=lfs -text
 
 # exclude files from github language list
-# /godot/addons/**/*.gd linguist-vendored
-# /godot/addons/**/*.cs linguist-vendored
-
 /godot/addons/** linguist-vendored
