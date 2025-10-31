@@ -1,7 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://j5d1ef3sn3p3"]
+[gd_scene load_steps=12 format=3 uid="uid://j5d1ef3sn3p3"]
 
 [ext_resource type="Texture2D" uid="uid://c0ol6hnl03wm0" path="res://assets/sprites/asteroid-small.png" id="1_23cm1"]
-[ext_resource type="Script" uid="uid://cp3bhecd07bxt" path="res://scripts/asteroid-small.gd" id="1_q5apu"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_q5apu"]
 
@@ -48,7 +47,6 @@ color_initial_ramp = SubResource("GradientTexture1D_eoqba")
 alpha_curve = SubResource("CurveTexture_y25gk")
 
 [node name="SmallAsteroid" type="SmallAsteroid" groups=["asteroid"]]
-script = ExtResource("1_q5apu")
 
 [node name="Asteroid" type="Asteroid" parent="."]
 
