@@ -137,8 +137,8 @@ func _spawn_asteroid(asteroid_size: String, ast_position: Vector2) -> void:
 		$Asteroids.call_deferred("add_child", new_ast2)
 	
 	elif asteroid_size == "medium":
-		var new_ast1: Asteroid_GDS = small_ast_scene.instantiate()
-		var new_ast2: Asteroid_GDS = small_ast_scene.instantiate()
+		var new_ast1 = small_ast_scene.instantiate()
+		var new_ast2 = small_ast_scene.instantiate()
 		new_ast1.use_set_position = true
 		new_ast2.use_set_position = true
 		new_ast1.global_position = ast_position
