@@ -62,7 +62,7 @@ impl SmallAsteroid {
         ast_bind.collision.set_disabled(true);
         ast_bind.explosion_to_queue_free.start();
 
-        // TODO: find out how to translate this stuff to rust (it uses a singleton)
+        // TODO: find out how to translate this stuff to rust (it uses a singleton and a plugin)
         // SFXManager.explosion.set_parameter("WhichSound", "SmallMed")
         // SFXManager.explosion.play()
     }
