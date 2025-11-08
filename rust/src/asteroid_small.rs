@@ -1,3 +1,5 @@
+// NOTE: done with this file
+
 use godot::classes::{Area2D, IArea2D};
 use godot::global::randi_range;
 use godot::prelude::*;
@@ -17,10 +19,10 @@ struct SmallAsteroid {
 impl IArea2D for SmallAsteroid {
     fn ready(&mut self) {
         {
-            let mut ast_base = self.ast_base.bind_mut();
-            ast_base.asteroid_ready(); // super
+            let mut ast_bind = self.ast_base.bind_mut();
+            ast_bind.asteroid_ready(); // super
 
-            ast_base.horizontal_speed = randi_range(40, 55) as f32 * ast_base.direction.x;
+            ast_bind.horizontal_speed = randi_range(40, 55) as f32 * ast_bind.direction.x;
         }
         self.ast_base
             .bind()
@@ -62,9 +64,13 @@ impl SmallAsteroid {
         ast_bind.collision.set_disabled(true);
         ast_bind.explosion_to_queue_free.start();
 
-        // TODO: find out how to translate this stuff to rust (it uses a singleton and a plugin)
-        // SFXManager.explosion.set_parameter("WhichSound", "SmallMed")
-        // SFXManager.explosion.play()
+        // it took me way too much time to learn about Object::call
+        let mut explosion_sfx = ast_bind.SFXManager.get_node_as::<Node2D>("Explosion");
+        explosion_sfx.call(
+            "set_parameter",
+            &["WhichSound".to_variant(), "SmallMed".to_variant()],
+        );
+        explosion_sfx.call("play", &[]);
     }
 
     // signal connection
