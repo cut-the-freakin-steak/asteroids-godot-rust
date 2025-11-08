@@ -1,6 +1,7 @@
 use godot::prelude::*;
 
 mod asteroid;
+mod asteroid_medium;
 mod asteroid_small;
 mod main_scene;
 mod player;

@@ -8,7 +8,7 @@ use crate::asteroid::{Asteroid, AsteroidIFunctions};
 
 #[derive(GodotClass)]
 #[class(init, base = Area2D)]
-struct SmallAsteroid {
+struct MediumAsteroid {
     base: Base<Area2D>,
 
     #[init(node = "Asteroid")]
@@ -16,14 +16,14 @@ struct SmallAsteroid {
 }
 
 #[godot_api]
-impl IArea2D for SmallAsteroid {
+impl IArea2D for MediumAsteroid {
     fn ready(&mut self) {
         {
             let mut ast_bind = self.ast_base.bind_mut();
             ast_bind.asteroid_ready(); // super
 
-            ast_bind.rotation_speed = randi_range(4, 5) as i32;
-            ast_bind.horizontal_speed = randi_range(40, 55) as f32 * ast_bind.direction.x;
+            ast_bind.rotation_speed = randi_range(2, 3) as i32;
+            ast_bind.horizontal_speed = randi_range(30, 40) as f32 * ast_bind.direction.x;
         }
         self.ast_base
             .bind()
@@ -55,11 +55,16 @@ impl IArea2D for SmallAsteroid {
 }
 
 #[godot_api]
-impl SmallAsteroid {
+impl MediumAsteroid {
     #[func]
     fn split_in_two(&mut self) {
+        let global_position = self.base().get_global_position();
         let mut ast_bind = self.ast_base.bind_mut();
-        ast_bind.main.bind_mut().score += 3;
+        ast_bind.main.bind_mut().score += 2;
+        ast_bind.main.emit_signal(
+            "asteroid_hit",
+            &["medium".to_variant(), global_position.to_variant()],
+        );
         ast_bind.explosion_parts.set_emitting(true);
         ast_bind.sprite.set_visible(false);
         ast_bind.collision.set_disabled(true);
