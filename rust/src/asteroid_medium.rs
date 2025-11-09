@@ -20,7 +20,7 @@ impl IArea2D for MediumAsteroid {
     fn ready(&mut self) {
         {
             let mut ast_bind = self.ast_base.bind_mut();
-            ast_bind.asteroid_ready(); // super
+            ast_bind.asteroid_ready(); // super()
 
             ast_bind.rotation_speed = randi_range(2, 3) as i32;
             ast_bind.horizontal_speed = randi_range(30, 40) as f32 * ast_bind.direction.x;

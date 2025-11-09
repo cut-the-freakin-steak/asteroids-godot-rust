@@ -1,7 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://dt3wue0gyomlo"]
+[gd_scene load_steps=12 format=3 uid="uid://dt3wue0gyomlo"]
 
 [ext_resource type="Texture2D" uid="uid://bw1mkbpasvltu" path="res://assets/sprites/asteroid-medium.png" id="1_mdb8w"]
-[ext_resource type="Script" uid="uid://dwf0s4x3gt0qy" path="res://scripts/asteroid-medium.gd" id="1_n21yn"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_n21yn"]
 
@@ -47,9 +46,9 @@ color_ramp = SubResource("GradientTexture1D_3ns4a")
 color_initial_ramp = SubResource("GradientTexture1D_pebgj")
 alpha_curve = SubResource("CurveTexture_iii60")
 
-[node name="MediumAsteroid" type="Area2D" groups=["asteroid"]]
-script = ExtResource("1_n21yn")
-metadata/_custom_type_script = "uid://cgnx2cehhifog"
+[node name="MediumAsteroid" type="MediumAsteroid" groups=["asteroid"]]
+
+[node name="Asteroid" type="Asteroid" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_mdb8w")
