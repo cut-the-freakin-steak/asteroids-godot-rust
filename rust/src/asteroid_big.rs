@@ -1,8 +1,13 @@
+// NOTE: done with this file
+
 use godot::classes::{Area2D, IArea2D};
 use godot::global::randi_range;
 use godot::prelude::*;
 
-use crate::asteroid::{Asteroid, AsteroidIFunctions};
+use crate::{
+    asteroid::{Asteroid, AsteroidIFunctions},
+    camera_manager::CameraManager,
+};
 
 #[derive(GodotClass)]
 #[class(init, base = Area2D)]
@@ -13,7 +18,7 @@ struct MediumAsteroid {
     ast_base: OnReady<Gd<Asteroid>>,
 
     #[init(val = OnReady::manual())]
-    camera_manager: OnReady<Gd<Node>>,
+    camera_manager: OnReady<Gd<CameraManager>>,
 }
 
 #[godot_api]
@@ -38,7 +43,7 @@ impl IArea2D for MediumAsteroid {
         let ast_base = self.base();
         if ast_base.get_name() == "Main".into() {
             self.camera_manager
-                .init(ast_bind.main.get_node_as::<Node>("CameraManager"));
+                .init(ast_bind.main.get_node_as::<CameraManager>("CameraManager"));
         }
     }
 
@@ -87,8 +92,7 @@ impl MediumAsteroid {
         );
         explosion_sfx.call("play", &[]);
 
-        // TODO: ts
-        // camera_manager.screen_shake(2.5, 0.3)
+        self.camera_manager.bind_mut().screen_shake(2.5, 0.3);
     }
 
     // signal connection

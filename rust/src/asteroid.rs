@@ -14,6 +14,7 @@ pub struct Asteroid {
     pub base: Base<Area2D>,
 
     // singletons
+    #[allow(non_snake_case)]
     #[init(node = "/root/SFXManager")]
     pub SFXManager: OnReady<Gd<Node2D>>,
 
@@ -91,18 +92,22 @@ impl AsteroidIFunctions for Asteroid {
         let position = self.base().get_position();
         if position.x <= 50.0 {
             self.direction.x = 1.0;
-        } else if position.x >= 150.0 {
+        }
+        else if position.x >= 150.0 {
             self.direction.x = -1.0;
-        } else {
+        }
+        else {
             let ones = array![-1.0, 1.0];
             self.direction.x = ones.get(randi() as usize % ones.len()).unwrap();
         }
 
         if position.y <= 50.0 {
             self.direction.y = 1.0;
-        } else if position.y >= 150.0 {
+        }
+        else if position.y >= 150.0 {
             self.direction.y = -1.0;
-        } else {
+        }
+        else {
             let ones = array![-1.0, 1.0];
             self.direction.y = ones.get(randi() as usize % ones.len()).unwrap();
         }
@@ -110,7 +115,8 @@ impl AsteroidIFunctions for Asteroid {
         let vert_speed_coin_flip = randi_range(0, 1);
         if vert_speed_coin_flip == 0 {
             self.vertical_speed = randi_range(20, 30) as f32 * self.direction.y;
-        } else {
+        }
+        else {
             self.vertical_speed = randi_range(35, 45) as f32 * self.direction.y;
         }
         self.base()

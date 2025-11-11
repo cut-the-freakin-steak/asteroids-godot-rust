@@ -8,3 +8,6 @@ crate-type = ["cdylib"] # Compile this crate to a dynamic C library.
 
 [dependencies]
 godot = "0.4.2"
+
+[lints.rust]
+non_snake_case = "allow"
