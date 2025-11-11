@@ -11,7 +11,7 @@ use crate::{
 
 #[derive(GodotClass)]
 #[class(init, base = Area2D)]
-struct MediumAsteroid {
+struct BigAsteroid {
     base: Base<Area2D>,
 
     #[init(node = "Asteroid")]
@@ -22,7 +22,7 @@ struct MediumAsteroid {
 }
 
 #[godot_api]
-impl IArea2D for MediumAsteroid {
+impl IArea2D for BigAsteroid {
     fn ready(&mut self) {
         {
             let mut ast_bind = self.ast_base.bind_mut();
@@ -69,7 +69,7 @@ impl IArea2D for MediumAsteroid {
 }
 
 #[godot_api]
-impl MediumAsteroid {
+impl BigAsteroid {
     #[func]
     fn split_in_two(&mut self) {
         let global_position = self.base().get_global_position();

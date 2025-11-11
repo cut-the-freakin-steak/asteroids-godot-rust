@@ -20,5 +20,5 @@
 # ar = "x86_64-w64-mingw32-ar"
 #
 # # You could also add rustflags per-target if needed
-# #[target.x86_64-apple-darwin]
-# #rustflags = ["-C", "some-flag"]
+# # [target.x86_64-apple-darwin]
+# # rustflags = ["-C", "some-flag"]
