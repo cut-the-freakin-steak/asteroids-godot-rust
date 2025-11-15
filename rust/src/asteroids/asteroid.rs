@@ -6,7 +6,7 @@ use godot::classes::{
 use godot::global::{randi, randi_range, randomize};
 use godot::prelude::*;
 
-use crate::{main_scene, player};
+use crate::{audio::sfx_manager, main_scene, player};
 
 #[derive(GodotClass)]
 #[class(init, base = Area2D)]
@@ -16,7 +16,7 @@ pub struct Asteroid {
     // singletons
     #[allow(non_snake_case)]
     #[init(node = "/root/SFXManager")]
-    pub SFXManager: OnReady<Gd<Node2D>>,
+    pub SFXManager: OnReady<Gd<sfx_manager::SFXManagerClass>>,
 
     // onreadys
     #[init(val = OnReady::manual())]

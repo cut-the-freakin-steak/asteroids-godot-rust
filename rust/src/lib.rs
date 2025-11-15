@@ -1,12 +1,12 @@
 use godot::prelude::*;
 
-mod asteroid;
-mod asteroid_big;
-mod asteroid_medium;
-mod asteroid_small;
+mod asteroids;
+mod audio;
 mod camera_manager;
+mod global_settings;
 mod main_scene;
 mod player;
+mod window_manager;
 
 struct MyExtension;
 

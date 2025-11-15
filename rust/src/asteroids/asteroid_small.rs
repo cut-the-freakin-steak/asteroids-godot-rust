@@ -4,11 +4,11 @@ use godot::classes::{Area2D, IArea2D};
 use godot::global::randi_range;
 use godot::prelude::*;
 
-use crate::asteroid::{Asteroid, AsteroidIFunctions};
+use crate::asteroids::asteroid::{Asteroid, AsteroidIFunctions};
 
 #[derive(GodotClass)]
 #[class(init, base = Area2D)]
-struct SmallAsteroid {
+pub struct SmallAsteroid {
     base: Base<Area2D>,
 
     #[init(node = "Asteroid")]
@@ -66,7 +66,7 @@ impl SmallAsteroid {
         ast_bind.explosion_to_queue_free.start();
 
         // it took me way too much time to learn about Object::call
-        let mut explosion_sfx = ast_bind.SFXManager.get_node_as::<Node2D>("Explosion");
+        let explosion_sfx = &mut ast_bind.SFXManager.bind_mut().explosion;
         explosion_sfx.call(
             "set_parameter",
             &["WhichSound".to_variant(), "SmallMed".to_variant()],
