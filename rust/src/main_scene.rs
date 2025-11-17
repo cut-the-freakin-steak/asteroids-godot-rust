@@ -1,6 +1,7 @@
+use crate::audio::music_manager::MusicManagerClass;
 use crate::global_settings::SettingsClass;
 use godot::classes::{
-    AnimationPlayer, Button, CharacterBody2D, Control, INode2D, Label, Node, Node2D,
+    AnimationPlayer, Button, CharacterBody2D, Control, INode2D, Input, Label, Node, Node2D,
     ResourceLoader, Timer,
 };
 use godot::prelude::*;
@@ -105,6 +106,10 @@ pub struct Main {
     #[allow(non_snake_case)]
     #[init(node = "/root/Settings")]
     Settings: OnReady<Gd<SettingsClass>>,
+
+    #[allow(non_snake_case)]
+    #[init(node = "/root/MusicManager")]
+    MusicManager: OnReady<Gd<MusicManagerClass>>,
 }
 
 #[godot_api]
@@ -173,23 +178,120 @@ impl INode2D for Main {
             ]);
         }
 
-        // if Settings.hurricane_mode:
-        //     MusicManager.gameplay.set_parameter("WhichGameplaySong", "Hurricane")
-        //
-        // else:
-        //     MusicManager.gameplay.set_parameter("WhichGameplaySong", "Normal")
-        //
-        // MusicManager.gameplay.set_parameter("MuffledOrNot", 1.0)
-        // MusicManager.gameplay.set_parameter("NormalGameplaySongPitch", 0.0)
-        //
-        // score = 0
-        // is_game_over = false
-        // game_over_anim_skipped = false
-        // game_over.connect(_on_game_over)
-        // asteroid_hit.connect(_spawn_asteroid)
+        if self.Settings.bind().hurricane_mode {
+            self.MusicManager.bind_mut().gameplay.call(
+                "set_parameter",
+                &["WhichGameplaySong".to_variant(), "Hurricane".to_variant()],
+            );
+        }
+        else {
+            self.MusicManager.bind_mut().gameplay.call(
+                "set_parameter",
+                &["WhichGameplaySong".to_variant(), "Normal".to_variant()],
+            );
+        }
+
+        self.MusicManager.bind_mut().gameplay.call(
+            "set_parameter",
+            &["MuffledOrNot".to_variant(), 1.0.to_variant()],
+        );
+
+        self.MusicManager.bind_mut().gameplay.call(
+            "set_parameter",
+            &["NormalGameplaySongPitch".to_variant(), 0.0.to_variant()],
+        );
+
+        self.score = 0;
+        self.is_game_over = false;
+        self.game_over_anim_skipped = false;
+        self.signals().game_over().connect_self(Self::_on_game_over);
+        self.signals()
+            .asteroid_hit()
+            .connect_self(Self::_spawn_asteroid);
     }
 
-    fn physics_process(&mut self, delta: f64) {}
+    fn process(&mut self, _delta: f64) {
+        let input = Input::singleton();
+
+        if input.is_action_just_pressed("esc") && !self.is_game_over {
+            if !self.is_paused {
+                self.is_paused = true;
+                self.pause_ui.set_visible(true);
+                self.resume_button.set_disabled(false);
+                self.pause_settings_button.set_disabled(false);
+                self.pause_main_menu_button.set_disabled(false);
+                self.MusicManager.bind_mut().gameplay.call(
+                    "set_parameter",
+                    &["MuffledOrNot".to_variant(), 0.40.to_variant()],
+                );
+            }
+            else {
+                self.is_paused = false;
+                self.pause_ui.set_visible(false);
+                self.resume_button.set_disabled(true);
+                self.pause_settings_button.set_disabled(true);
+                self.pause_main_menu_button.set_disabled(true);
+                self.MusicManager.bind_mut().gameplay.call(
+                    "set_parameter",
+                    &["MuffledOrNot".to_variant(), 1.0.to_variant()],
+                );
+            }
+        }
+
+        if self.is_paused {
+            if self.Settings.bind().hurricane_mode {
+                if self
+                    .MusicManager
+                    .bind_mut()
+                    .gameplay
+                    .call("get_parameter", &["WhichGameplaySong".to_variant()])
+                    .try_to::<GString>()
+                    .unwrap()
+                    != "Hurricane".to_godot()
+                {}
+            }
+        }
+
+        // if is_paused:
+        //     if Settings.hurricane_mode:
+        //         if MusicManager.gameplay.get_parameter("WhichGameplaySong") != "Hurricane":
+        //             MusicManager.gameplay.stop()
+        //             MusicManager.gameplay.set_parameter("WhichGameplaySong", "Hurricane")
+        //             MusicManager.gameplay.play(false)
+        //
+        //     else:
+        //         if MusicManager.gameplay.get_parameter("WhichGameplaySong") != "Normal":
+        //             MusicManager.gameplay.stop()
+        //             MusicManager.gameplay.set_parameter("WhichGameplaySong", "Normal")
+        //             MusicManager.gameplay.play(false)
+        //
+        //     return
+        //
+        // if is_game_over != true:
+        //     MusicManager.gameplay.play(false)
+        //
+        // if Input.is_action_just_pressed("shoot") and player.alive and player.shoot_timer.time_left == 0:
+        //     var new_laser: CharacterBody2D = laser.instantiate()
+        //     new_laser.global_position = player.get_node("ShootOrigin").global_position
+        //     $Lasers.add_child(new_laser)
+        //     player.shoot_timer.start()
+        //
+        // score_label.text = "Score: " + str(score)
+        //
+        // if is_game_over and not game_over_buttons_animation.is_playing() and Input.is_action_just_pressed("skip_animation"):
+        //     game_over_anim_skipped = true
+        //     ui_animation.stop()
+        //     try_again_button.visible = true
+        //     main_menu_button.visible = true
+        //     game_over_text.modulate.a = 1.0
+        //     try_again_button.modulate.a = 1.0
+        //     main_menu_button.modulate.a = 1.0
+        //     game_over_label_animation.play("idle")
+        //     game_over_buttons_animation.play("idle")
+        //
+        // if Settings.hurricane_mode:
+        //     camera_manager.screen_shake(3.5, 0.2)
+    }
 }
 
 #[godot_api]
@@ -199,4 +301,12 @@ impl Main {
 
     #[signal]
     fn asteroid_hit(asteroid_size: GString, position: Vector2);
+
+    // signal connection
+    #[func]
+    pub fn _on_game_over(&mut self) {}
+
+    // signal connection
+    #[func]
+    fn _spawn_asteroid(&mut self, asteroid_size: GString, position: Vector2) {}
 }

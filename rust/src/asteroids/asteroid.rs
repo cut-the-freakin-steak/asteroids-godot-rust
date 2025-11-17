@@ -52,8 +52,8 @@ pub struct Asteroid {
 }
 
 pub trait AsteroidIFunctions {
-    fn asteroid_ready(&mut self) {}
-    fn asteroid_physics_process(&mut self, _delta: f64) {}
+    fn asteroid_ready(&mut self);
+    fn asteroid_physics_process(&mut self, _delta: f64);
 }
 
 impl AsteroidIFunctions for Asteroid {
@@ -122,7 +122,7 @@ impl AsteroidIFunctions for Asteroid {
         self.base()
             .signals()
             .body_entered()
-            .connect_other(self, Self::on_body_entered);
+            .connect_other(self, Self::_on_body_entered);
     }
 
     fn asteroid_physics_process(&mut self, delta: f64) {
@@ -169,7 +169,7 @@ impl IArea2D for Asteroid {
 impl Asteroid {
     // signal connection
     #[func]
-    pub fn on_body_entered(&mut self, body: Gd<Node2D>) {
+    pub fn _on_body_entered(&mut self, body: Gd<Node2D>) {
         if body.is_in_group("player") {
             // FIX: figure out a way to make ts type safe
             // NOTE: ^ figured it out :3
