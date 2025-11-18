@@ -1,8 +1,8 @@
 use crate::audio::music_manager::MusicManagerClass;
 use crate::global_settings::SettingsClass;
+use crate::player::Player;
 use godot::classes::{
-    AnimationPlayer, Button, CharacterBody2D, Control, INode2D, Input, Label, Node, Node2D,
-    ResourceLoader, Timer,
+    AnimationPlayer, Button, Control, INode2D, Input, Label, Node, Node2D, ResourceLoader, Timer,
 };
 use godot::prelude::*;
 
@@ -14,7 +14,7 @@ pub struct Main {
 
     // nodes
     #[init(node = "PlayerStuff/Player")]
-    player: OnReady<Gd<CharacterBody2D>>,
+    player: OnReady<Gd<Player>>,
 
     #[init(val = OnReady::manual())]
     scene_root_node: OnReady<Gd<Node>>,
@@ -91,10 +91,10 @@ pub struct Main {
 
     // miscellaneous variables
     #[init(val = false)]
-    is_game_over: bool,
+    game_over_anim_skipped: bool,
 
     #[init(val = false)]
-    game_over_anim_skipped: bool,
+    pub is_game_over: bool,
 
     #[init(val = false)]
     pub is_paused: bool,
@@ -212,6 +212,7 @@ impl INode2D for Main {
 
     fn process(&mut self, _delta: f64) {
         let input = Input::singleton();
+        let gameplay_song = &mut self.MusicManager.bind_mut().gameplay;
 
         if input.is_action_just_pressed("esc") && !self.is_game_over {
             if !self.is_paused {
@@ -220,7 +221,7 @@ impl INode2D for Main {
                 self.resume_button.set_disabled(false);
                 self.pause_settings_button.set_disabled(false);
                 self.pause_main_menu_button.set_disabled(false);
-                self.MusicManager.bind_mut().gameplay.call(
+                gameplay_song.call(
                     "set_parameter",
                     &["MuffledOrNot".to_variant(), 0.40.to_variant()],
                 );
@@ -231,7 +232,7 @@ impl INode2D for Main {
                 self.resume_button.set_disabled(true);
                 self.pause_settings_button.set_disabled(true);
                 self.pause_main_menu_button.set_disabled(true);
-                self.MusicManager.bind_mut().gameplay.call(
+                gameplay_song.call(
                     "set_parameter",
                     &["MuffledOrNot".to_variant(), 1.0.to_variant()],
                 );
@@ -240,36 +241,42 @@ impl INode2D for Main {
 
         if self.is_paused {
             if self.Settings.bind().hurricane_mode {
-                if self
-                    .MusicManager
-                    .bind_mut()
-                    .gameplay
+                if gameplay_song
                     .call("get_parameter", &["WhichGameplaySong".to_variant()])
                     .try_to::<GString>()
                     .unwrap()
                     != "Hurricane".to_godot()
-                {}
+                {
+                    gameplay_song.call("stop", &[]);
+                    gameplay_song.call(
+                        "set_parameter",
+                        &["WhichGameplaySong".to_variant(), "Hurricane".to_variant()],
+                    );
+                    gameplay_song.call("play", &[false.to_variant()]);
+                }
             }
+            else if gameplay_song
+                .call("get_parameter", &["WhichGameplaySong".to_variant()])
+                .try_to::<GString>()
+                .unwrap()
+                != "Normal".to_godot()
+            {
+                gameplay_song.call("stop", &[]);
+                gameplay_song.call(
+                    "set_parameter",
+                    &["WhichGameplaySong".to_variant(), "Normal".to_variant()],
+                );
+                gameplay_song.call("play", &[false.to_variant()]);
+            }
+            return;
         }
 
-        // if is_paused:
-        //     if Settings.hurricane_mode:
-        //         if MusicManager.gameplay.get_parameter("WhichGameplaySong") != "Hurricane":
-        //             MusicManager.gameplay.stop()
-        //             MusicManager.gameplay.set_parameter("WhichGameplaySong", "Hurricane")
-        //             MusicManager.gameplay.play(false)
-        //
-        //     else:
-        //         if MusicManager.gameplay.get_parameter("WhichGameplaySong") != "Normal":
-        //             MusicManager.gameplay.stop()
-        //             MusicManager.gameplay.set_parameter("WhichGameplaySong", "Normal")
-        //             MusicManager.gameplay.play(false)
-        //
-        //     return
-        //
-        // if is_game_over != true:
-        //     MusicManager.gameplay.play(false)
-        //
+        if !self.is_game_over {
+            gameplay_song.call("play", &[false.to_variant()]);
+        }
+
+        if input.is_action_just_pressed("shoot") && self.player.bind().alive {}
+
         // if Input.is_action_just_pressed("shoot") and player.alive and player.shoot_timer.time_left == 0:
         //     var new_laser: CharacterBody2D = laser.instantiate()
         //     new_laser.global_position = player.get_node("ShootOrigin").global_position
