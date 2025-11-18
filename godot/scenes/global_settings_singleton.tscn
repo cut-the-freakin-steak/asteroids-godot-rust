@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://cutm4iaqdt7qp"]
+
+[node name="Settings" type="SettingsClass"]

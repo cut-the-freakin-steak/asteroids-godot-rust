@@ -36,12 +36,12 @@ buses/default_bus_layout=""
 [autoload]
 
 PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_camera_manager.gd"
-Settings="*res://scripts/global_settings_singleton.gd"
-WindowManager="*res://scripts/window_manager.gd"
+FmodManager="*res://addons/fmod/FmodManager.gd"
+BankLoaderFmod="*res://scenes/bank_loader_fmod.tscn"
+Settings="*res://scenes/global_settings_singleton.tscn"
 MusicManager="*res://scenes/music_manager.tscn"
 SFXManager="*res://scenes/sfx_manager.tscn"
-BankLoaderFmod="*res://scenes/bank_loader_fmod.tscn"
-FmodManager="*res://addons/fmod/FmodManager.gd"
+WindowManager="*res://scenes/window_manager.tscn"
 
 [display]
 

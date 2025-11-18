@@ -47,9 +47,10 @@ color_ramp = SubResource("GradientTexture1D_g0rjo")
 color_initial_ramp = SubResource("GradientTexture1D_81r1n")
 alpha_curve = SubResource("CurveTexture_vcop2")
 
-[node name="BigAsteroid" type="Area2D" groups=["asteroid"]]
+[node name="BigAsteroid" type="BigAsteroid" groups=["asteroid"]]
 script = ExtResource("1_osnpa")
-metadata/_custom_type_script = "uid://cgnx2cehhifog"
+
+[node name="Asteroid" type="Asteroid" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_px3sp")

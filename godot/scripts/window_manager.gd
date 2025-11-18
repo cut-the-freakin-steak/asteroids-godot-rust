@@ -10,10 +10,10 @@ func _process(_delta: float):
 		# get window width
 		window_w = DisplayServer.window_get_size().x
 		# since the resolution is 1:1 divide the width by 1 and multiply by 1 to get height
-		window_h = window_w / 1.0 * 1 # if the aspect ratio would be 1:1, this would be a whole lot more useful lmao
-	# set the window size to the current width and the new height
+		window_h = window_w / 1.0 * 1 # if the aspect ratio wasnt 1:1, this would be a whole lot more useful lmao
+		# set the window size to the current width and the new height
 		DisplayServer.window_set_size(Vector2(window_w, window_h))
-	# change the window_size variable to match the new size
+		# change the window_size variable to match the new size
 		window_size = DisplayServer.window_get_size()
 
 #! DONT PAY ATTENTION TO ANYTHING BELOW THIS COMMENT, THIS IS JUST FOR FUNNY MODE

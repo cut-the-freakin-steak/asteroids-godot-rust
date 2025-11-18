@@ -1,11 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://c84auvfixbxf5"]
+[gd_scene format=3 uid="uid://c84auvfixbxf5"]
 
-[ext_resource type="Script" uid="uid://ce263noasy2kb" path="res://scripts/audio/music.gd" id="1_tn5dr"]
-
-[node name="MusicManager" type="Node2D" node_paths=PackedStringArray("gameplay", "title_theme")]
-script = ExtResource("1_tn5dr")
-gameplay = NodePath("Gameplay")
-title_theme = NodePath("TitleTheme")
+[node name="MusicManager" type="MusicManagerClass"]
 
 [node name="Gameplay" type="FmodEventEmitter2D" parent="."]
 event_name = "event:/Music/GameplayMusic"

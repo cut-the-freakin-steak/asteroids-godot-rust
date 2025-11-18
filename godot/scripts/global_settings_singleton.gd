@@ -68,7 +68,7 @@ func load_settings() -> void:
 	music_volume = settings_dict.get("music_volume", music_volume)
 	sfx_volume = settings_dict.get("sfx_volume", sfx_volume)
 	
-	# any settings not seen here handle their behaviour based on a variable, and they aren't set with a specific command
+	# any settings not seen here handle their behaviour based on a variable or function that isn't the direct variable that we set above
 	match vsync_on:
 		true:
 			DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)

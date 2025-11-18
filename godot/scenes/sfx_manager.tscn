@@ -1,15 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://ro4si7messfm"]
+[gd_scene format=3 uid="uid://ro4si7messfm"]
 
-[ext_resource type="Script" uid="uid://doapjseheg0x6" path="res://scripts/audio/sfx.gd" id="1_wd8mt"]
-
-[node name="SFXManager" type="Node2D" node_paths=PackedStringArray("click", "explosion", "ship_thruster", "laser_shot", "player_hurt", "splash_screen")]
-script = ExtResource("1_wd8mt")
-click = NodePath("Click")
-explosion = NodePath("Explosion")
-ship_thruster = NodePath("ShipThruster")
-laser_shot = NodePath("LaserShot")
-player_hurt = NodePath("PlayerHurt")
-splash_screen = NodePath("SplashScreen")
+[node name="SFXManager" type="SFXManagerClass"]
 
 [node name="Click" type="FmodEventEmitter2D" parent="."]
 event_name = "event:/SFX/ButtonClick"
