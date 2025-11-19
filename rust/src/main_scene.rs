@@ -304,7 +304,7 @@ impl INode2D for Main {
 #[godot_api]
 impl Main {
     #[signal]
-    fn game_over();
+    pub fn game_over();
 
     #[signal]
     fn asteroid_hit(asteroid_size: GString, position: Vector2);

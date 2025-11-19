@@ -1,6 +1,10 @@
+// NOTE: done with this file
+
 use godot::classes::{
-    CharacterBody2D, GpuParticles2D, ICharacterBody2D, Input, Label, Sprite2D, Timer,
+    AnimationPlayer, CharacterBody2D, GpuParticles2D, ICharacterBody2D, Input, Label, Sprite2D,
+    Timer,
 };
+use godot::global::deg_to_rad;
 use godot::prelude::*;
 
 use crate::main_scene::Main;
@@ -43,8 +47,8 @@ pub struct Player {
     #[init(val = OnReady::manual())]
     sprite_dimensions: OnReady<Vector2>,
 
-    #[init(val = 100)]
-    max_speed: i32,
+    #[init(val = 100.0)]
+    max_speed: f32,
 
     #[init(val = 2.5)]
     acceleration: f32,
@@ -58,9 +62,8 @@ pub struct Player {
     #[init(val = false)]
     ship_on_screen_border_y: bool,
 
-    #[init(val = Vector2::ZERO)]
-    last_direction_faced: Vector2,
-
+    // #[init(val = Vector2::ZERO)]
+    // last_direction_faced: Vector2,
     #[init(val = 3)]
     hp: i32,
 
@@ -121,6 +124,11 @@ impl ICharacterBody2D for Player {
                 ));
         }
 
+        self.i_frame_timer
+            .signals()
+            .timeout()
+            .connect_other(self, Self::_on_i_frame_timer_timeout);
+
         self.signals()
             .damage_taken()
             .connect_self(Self::_on_damage_taken);
@@ -128,25 +136,194 @@ impl ICharacterBody2D for Player {
 
     fn process(&mut self, delta: f64) {
         let input = Input::singleton();
+        let ship_thruster_sfx = &mut self.SFXManager.bind_mut().ship_thruster;
 
         if self.main.bind().is_game_over || input.is_action_pressed("decelerate") {
-            self.SFXManager.bind_mut().ship_thruster.call("stop", &[]);
+            ship_thruster_sfx.call("stop", &[]);
         }
         else {
+            if input.is_action_just_pressed("up") {
+                ship_thruster_sfx.call(
+                    "set_parameter",
+                    &["ShouldLoop".to_variant(), "Yes".to_variant()],
+                );
+
+                ship_thruster_sfx.call("play", &[]);
+            }
+
+            if input.is_action_pressed("up") {
+                ship_thruster_sfx.call("play", &[false.to_variant()]);
+                if ship_thruster_sfx
+                    .call("get_parameter", &["PitchParam".to_variant()])
+                    .try_to::<f32>()
+                    .unwrap()
+                    .to_godot()
+                    < 0.20
+                {
+                    let modified_pitch_param = ship_thruster_sfx
+                        .call("get_parameter", &["PitchParam".to_variant()])
+                        .try_to::<f32>()
+                        .unwrap()
+                        + (0.10 * delta as f32);
+                    ship_thruster_sfx.call(
+                        "set_parameter",
+                        &["PitchParam".to_variant(), modified_pitch_param.to_variant()],
+                    );
+                }
+            }
+            if !input.is_action_pressed("up")
+                && ship_thruster_sfx
+                    .call("get_parameter", &["ShouldLoop".to_variant()])
+                    .try_to::<GString>()
+                    .unwrap()
+                    == "Yes".to_godot()
+            {
+                ship_thruster_sfx.call("stop", &[]);
+                ship_thruster_sfx.call(
+                    "set_parameter",
+                    &["PitchParam".to_variant(), 0.0.to_variant()],
+                );
+            }
         }
-        // else:
-        //     if Input.is_action_just_pressed("up"):
-        //         SFXManager.ship_thruster.set_parameter("ShouldLoop", "Yes")
-        //         SFXManager.ship_thruster.play()
-        //
-        //     if Input.is_action_pressed("up"):
-        //         SFXManager.ship_thruster.play(false)
-        //         if SFXManager.ship_thruster.get_parameter("PitchParam") < 0.20:
-        //             SFXManager.ship_thruster.set_parameter("PitchParam", SFXManager.ship_thruster.get_parameter("PitchParam") + (0.10 * delta))
-        //
-        //     if not Input.is_action_pressed("up") and SFXManager.ship_thruster.get_parameter("ShouldLoop") == "Yes":
-        //         SFXManager.ship_thruster.stop()
-        //         SFXManager.ship_thruster.set_parameter("PitchParam", 0.0)
+    }
+
+    fn physics_process(&mut self, delta: f64) {
+        let input = Input::singleton();
+
+        if !self.alive {
+            self.back_particles.set_emitting(false);
+            let velocity = self.base().get_velocity();
+            self.base_mut()
+                .set_velocity(velocity.move_toward(Vector2::ZERO, 1.0));
+
+            if velocity == Vector2::ZERO {
+                return;
+            }
+        }
+
+        if self.main.bind().is_paused {
+            self.back_particles.set_speed_scale(0.0);
+            self.back_particles.set_emitting(false);
+            return;
+        }
+        else {
+            self.back_particles.set_speed_scale(1.0);
+        }
+
+        // screen wrapping
+        let global_position = self.base().get_global_position();
+        if global_position.x - 5.0 > *self.screen_size {
+            self.base_mut().set_global_position(Vector2 {
+                x: 5.0,
+                y: global_position.y,
+            });
+        }
+
+        // hate the borrow checker fr
+        let screen_size = *self.screen_size;
+        if global_position.x + 5.0 < 0.0 {
+            self.base_mut().set_global_position(Vector2 {
+                x: screen_size - 5.0,
+                y: global_position.y,
+            });
+        }
+
+        if global_position.y - 5.0 > screen_size {
+            self.base_mut().set_global_position(Vector2 {
+                x: global_position.x,
+                y: 5.0,
+            });
+        }
+
+        if global_position.y + 5.0 < 0.0 {
+            self.base_mut().set_global_position(Vector2 {
+                x: global_position.x,
+                y: screen_size - 5.0,
+            });
+        }
+
+        self.show_screen_wrapped_ship();
+
+        // movement
+        if self.alive {
+            let rotation_direction = input.get_axis("left", "right");
+            let mut movement_vector = Vector2 {
+                x: 0.0,
+                y: input.get_axis("down", "up"),
+            };
+
+            if input.is_action_pressed("decelerate") {
+                movement_vector.y = -1.0;
+            }
+
+            let velocity = self.base().get_velocity();
+            let rotation = self.base().get_rotation();
+            let acceleration = self.acceleration;
+            if movement_vector.y == 1.0 {
+                self.base_mut().set_velocity(
+                    velocity
+                        + movement_vector.rotated(rotation - deg_to_rad(90.0) as f32)
+                            * acceleration,
+                );
+                self.back_particles.set_emitting(true);
+            }
+
+            if movement_vector.y == 0.0 {
+                self.base_mut()
+                    .set_velocity(velocity.move_toward(Vector2::ZERO, 1.3));
+                self.back_particles.set_emitting(false);
+            }
+
+            if movement_vector.y == -1.0 {
+                self.base_mut()
+                    .set_velocity(velocity.move_toward(Vector2::ZERO, 3.0));
+                self.back_particles.set_emitting(false);
+            }
+
+            let max_speed = self.max_speed;
+            self.base_mut()
+                .set_velocity(velocity.limit_length(Some(max_speed)));
+
+            let rotation_speed = self.rotation_speed;
+            self.base_mut()
+                .rotate(rotation_speed * rotation_direction * delta as f32);
+
+            // i-frame flashing
+            if self.i_frame_timer.get_time_left() > 0.5 {
+                self.millisecond_even_or_odd = self
+                    .i_frame_timer
+                    .get_time_left()
+                    .to_string()
+                    .to_godot()
+                    .split(".")[1]
+                    .to_int() as i32
+                    % 3;
+                if self.millisecond_even_or_odd == 0 {
+                    self.sprite.set_visible(false);
+                }
+                else {
+                    self.sprite.set_visible(true);
+                }
+            }
+            else if self.i_frame_timer.get_time_left() > 0.0 {
+                self.millisecond_even_or_odd = self
+                    .i_frame_timer
+                    .get_time_left()
+                    .to_string()
+                    .to_godot()
+                    .split(".")[1]
+                    .to_int() as i32
+                    % 2;
+                if self.millisecond_even_or_odd == 0 {
+                    self.sprite.set_visible(false);
+                }
+                else {
+                    self.sprite.set_visible(true);
+                }
+            }
+        }
+
+        self.base_mut().move_and_slide();
     }
 }
 
@@ -155,8 +332,114 @@ impl Player {
     #[signal]
     pub fn damage_taken();
 
+    // show ship at other side of screen when player going OOB
     #[func]
-    fn show_screen_wrapped_ship(&self) {}
+    fn show_screen_wrapped_ship(&mut self) {
+        // x-axis
+        let input = Input::singleton();
+        let position = self.base().get_position();
+        let global_position = self.base().get_global_position();
+        let rotation_degrees = self.base().get_rotation_degrees();
+
+        // right
+        if global_position.x
+            >= *self.screen_size - (self.sprite_dimensions.x - self.sprite_dimensions.x / 2.0)
+        {
+            self.ship_on_screen_border_x = true;
+            self.screen_wrap_stuff.set_global_position(Vector2 {
+                x: position.x - *self.screen_size,
+                y: position.y,
+            });
+            self.opposite_screen_sprite.set_visible(true);
+
+            self.screen_wrap_stuff
+                .set_rotation_degrees(rotation_degrees + 90.0);
+
+            if input.is_action_pressed("up") {
+                self.other_side_back_particles.set_emitting(true);
+            }
+            else {
+                self.other_side_back_particles.set_emitting(false);
+            }
+        }
+        // left
+        else if global_position.x <= 0.0 + (self.sprite_dimensions.x / 2.0) {
+            self.ship_on_screen_border_x = true;
+            self.screen_wrap_stuff.set_global_position(Vector2 {
+                x: position.x + *self.screen_size,
+                y: position.y,
+            });
+            self.opposite_screen_sprite.set_visible(true);
+
+            self.screen_wrap_stuff
+                .set_rotation_degrees(rotation_degrees + 90.0);
+
+            if input.is_action_pressed("up") {
+                self.other_side_back_particles.set_emitting(true);
+            }
+            else {
+                self.other_side_back_particles.set_emitting(false);
+            }
+        }
+        else {
+            self.ship_on_screen_border_x = false;
+            self.opposite_screen_sprite.set_visible(false);
+            self.other_side_back_particles.set_emitting(false);
+        }
+        // y-axis
+        // bottom
+        if global_position.y
+            >= *self.screen_size
+                - (self.sprite.get_texture().unwrap().get_height() as f32 / 2.0 + 8.0)
+        {
+            self.ship_on_screen_border_y = true;
+            self.screen_wrap_stuff.set_global_position(Vector2 {
+                x: position.x,
+                y: position.y - *self.screen_size,
+            });
+            self.opposite_screen_sprite.set_visible(true);
+            self.screen_wrap_stuff
+                .set_rotation_degrees(rotation_degrees + 90.0);
+
+            if input.is_action_pressed("up") {
+                self.other_side_back_particles.set_emitting(true);
+            }
+            else {
+                self.other_side_back_particles.set_emitting(false);
+            }
+        }
+        // top
+        else if global_position.y
+            <= 0.0 + (self.sprite.get_texture().unwrap().get_height() as f32 / 2.0 - 8.0)
+        {
+            self.ship_on_screen_border_y = true;
+            self.screen_wrap_stuff.set_global_position(Vector2 {
+                x: position.x,
+                y: position.y + *self.screen_size,
+            });
+            self.opposite_screen_sprite.set_visible(true);
+            self.screen_wrap_stuff
+                .set_rotation_degrees(rotation_degrees + 90.0);
+
+            if input.is_action_pressed("up") {
+                self.other_side_back_particles.set_emitting(true);
+            }
+            else {
+                self.other_side_back_particles.set_emitting(false);
+            }
+        }
+        else {
+            self.ship_on_screen_border_y = false;
+            if !self.ship_on_screen_border_x {
+                self.opposite_screen_sprite.set_visible(false);
+                self.other_side_back_particles.set_emitting(false);
+            }
+        }
+
+        if !self.alive {
+            self.other_side_back_particles.set_emitting(false);
+        }
+    }
 
     #[func]
     fn get_visible_sprite_dimensions(sprite_2d: Gd<Sprite2D>) -> Vector2 {
@@ -175,5 +458,86 @@ impl Player {
 
     // signal connection
     #[func]
-    fn _on_damage_taken(&mut self) {}
+    fn _on_damage_taken(&mut self) {
+        if !self.can_be_damaged {
+            return;
+        }
+
+        self.hp -= 1;
+
+        {
+            let player_hurt_sfx = &mut self.SFXManager.bind_mut().player_hurt;
+
+            match self.hp {
+                2 => {
+                    player_hurt_sfx.call(
+                        "set_parameter",
+                        &["HPRemaining".to_variant(), "Alive".to_variant()],
+                    );
+                    player_hurt_sfx.call("play", &[]);
+                    self.main
+                        .get_node_as::<AnimationPlayer>("UI/HealthUI/Health")
+                        .play_ex()
+                        .name("lose_health_1")
+                        .done();
+                }
+                1 => {
+                    player_hurt_sfx.call(
+                        "set_parameter",
+                        &["HPRemaining".to_variant(), "Alive".to_variant()],
+                    );
+                    player_hurt_sfx.call("play", &[]);
+                    self.main
+                        .get_node_as::<AnimationPlayer>("UI/HealthUI/Health")
+                        .play_ex()
+                        .name("lose_health_2")
+                        .done();
+                }
+                0 => {
+                    player_hurt_sfx.call(
+                        "set_parameter",
+                        &["HPRemaining".to_variant(), "Dead".to_variant()],
+                    );
+                    player_hurt_sfx.call("play", &[]);
+                    self.main
+                        .get_node_as::<AnimationPlayer>("UI/HealthUI/Health")
+                        .play_ex()
+                        .name("lose_health_3")
+                        .done();
+                }
+                _ => godot_error!("uhhhhh damn, youre not supposed to be able to do this lmao"),
+            }
+        }
+        if self.hp > 0 {
+            self.can_be_damaged = false;
+            self.i_frame_timer.start();
+
+            let velocity = self.base().get_velocity();
+            let rotation = self.base().get_rotation();
+            self.base_mut().set_velocity(
+                velocity
+                    + Vector2 { x: 0.0, y: -100.0 }.rotated(rotation - deg_to_rad(90.0) as f32),
+            );
+        }
+        else {
+            // you are die lmao
+            if self.alive {
+                let velocity = self.base().get_velocity();
+                let rotation = self.base().get_rotation();
+                self.base_mut().set_velocity(
+                    velocity
+                        + Vector2 { x: 0.0, y: -200.0 }.rotated(rotation - deg_to_rad(90.0) as f32),
+                );
+                self.main.signals().game_over().emit();
+            }
+
+            self.alive = false;
+        }
+    }
+
+    #[func]
+    fn _on_i_frame_timer_timeout(&mut self) {
+        self.sprite.set_visible(true);
+        self.can_be_damaged = true
+    }
 }
