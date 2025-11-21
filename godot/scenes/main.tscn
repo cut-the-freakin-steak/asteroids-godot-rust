@@ -1192,7 +1192,7 @@ process_priority = 300
 process_physics_priority = 300
 script = ExtResource("4_o6xl0")
 
-[node name="CameraManager" type="Node" parent="."]
+[node name="CameraManager" type="CameraManager" parent="."]
 script = ExtResource("5_85g3d")
 
 [node name="PhantomCamera2D" type="Node2D" parent="CameraManager"]

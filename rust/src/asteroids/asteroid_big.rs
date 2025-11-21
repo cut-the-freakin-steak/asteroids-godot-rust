@@ -5,7 +5,7 @@ use godot::global::randi_range;
 use godot::prelude::*;
 
 use crate::{
-    asteroids::asteroid::{Asteroid, AsteroidIFunctions},
+    asteroids::asteroid::{Asteroid, AsteroidIFunctions, AsteroidSize},
     camera_manager::CameraManager,
 };
 
@@ -15,10 +15,13 @@ pub struct BigAsteroid {
     base: Base<Area2D>,
 
     #[init(node = "Asteroid")]
-    ast_base: OnReady<Gd<Asteroid>>,
+    pub ast_base: OnReady<Gd<Asteroid>>,
 
     #[init(val = OnReady::manual())]
     camera_manager: OnReady<Gd<CameraManager>>,
+
+    #[init(val = AsteroidSize::Big)]
+    asteroid_size: AsteroidSize,
 }
 
 #[godot_api]
