@@ -2,7 +2,8 @@ use crate::audio::music_manager::MusicManagerClass;
 use crate::global_settings::SettingsClass;
 use crate::player::Player;
 use godot::classes::{
-    AnimationPlayer, Button, Control, INode2D, Input, Label, Node, Node2D, ResourceLoader, Timer,
+    AnimationPlayer, Button, CharacterBody2D, Control, INode2D, Input, Label, Marker2D, Node,
+    Node2D, ResourceLoader, Timer,
 };
 use godot::prelude::*;
 
@@ -275,11 +276,20 @@ impl INode2D for Main {
             gameplay_song.call("play", &[false.to_variant()]);
         }
 
-        if input.is_action_just_pressed("shoot") && self.player.bind().alive {}
+        if input.is_action_just_pressed("shoot")
+            && self.player.bind().alive
+            && self.player.bind().shoot_timer.get_time_left() == 0.0
+        {
+            let mut new_laser = self.laser.instantiate().unwrap().cast::<CharacterBody2D>();
+            new_laser.set_global_position(
+                self.player
+                    .get_node_as::<Marker2D>("ShootOrigin")
+                    .get_global_position(),
+            );
+            self.base().get_node_as("Lasers");
+        }
 
         // if Input.is_action_just_pressed("shoot") and player.alive and player.shoot_timer.time_left == 0:
-        //     var new_laser: CharacterBody2D = laser.instantiate()
-        //     new_laser.global_position = player.get_node("ShootOrigin").global_position
         //     $Lasers.add_child(new_laser)
         //     player.shoot_timer.start()
         //
