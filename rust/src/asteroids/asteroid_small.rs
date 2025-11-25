@@ -4,7 +4,7 @@ use godot::classes::{Area2D, IArea2D};
 use godot::global::randi_range;
 use godot::prelude::*;
 
-use crate::asteroids::asteroid::{Asteroid, AsteroidIFunctions};
+use crate::asteroids::asteroid::{Asteroid, AsteroidIFunctions, AsteroidSize};
 
 #[derive(GodotClass)]
 #[class(init, base = Area2D)]
@@ -12,7 +12,10 @@ pub struct SmallAsteroid {
     base: Base<Area2D>,
 
     #[init(node = "Asteroid")]
-    ast_base: OnReady<Gd<Asteroid>>,
+    pub ast_base: OnReady<Gd<Asteroid>>,
+
+    #[init(val = AsteroidSize::Small)]
+    asteroid_size: AsteroidSize,
 }
 
 #[godot_api]

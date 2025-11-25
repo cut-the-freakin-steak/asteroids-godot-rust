@@ -1,6 +1,5 @@
-[gd_scene load_steps=9 format=3 uid="uid://dxsu0lyfisjgy"]
+[gd_scene load_steps=8 format=3 uid="uid://dxsu0lyfisjgy"]
 
-[ext_resource type="Script" uid="uid://djrfljkaic70n" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Texture2D" uid="uid://bfxgp3dt64uc6" path="res://assets/sprites/player.png" id="2_g2els"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_g2els"]
@@ -35,12 +34,7 @@ scale_max = 3.5
 color = Color(1, 0.811765, 0.270588, 1)
 color_initial_ramp = SubResource("GradientTexture1D_qhqgy")
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "back_particles", "i_frame_timer", "shoot_timer") groups=["player"]]
-script = ExtResource("1_3vyb7")
-sprite = NodePath("Sprite2D")
-back_particles = NodePath("BackFireParticles")
-i_frame_timer = NodePath("IFrameTimer")
-shoot_timer = NodePath("ShootTimer")
+[node name="Player" type="Player" groups=["player"]]
 
 [node name="BackFireParticles" type="GPUParticles2D" parent="."]
 position = Vector2(-1, 0)

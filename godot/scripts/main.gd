@@ -116,15 +116,16 @@ func pop_in_buttons() -> void:
 	if game_over_anim_skipped:
 		return
 	
+
 	ui_animation.play("pop_in_game_over_buttons")
 	# also play animation for label moving around
 	game_over_label_animation.play("idle")
-		
+
 
 func button_idle_animation() -> void:
 	game_over_buttons_animation.play("idle")
-	
-	
+
+
 func _spawn_asteroid(asteroid_size: String, ast_position: Vector2) -> void:
 	if asteroid_size == "big":
 		var new_ast1: Asteroid_GDS = medium_ast_scene.instantiate()
@@ -157,7 +158,7 @@ func _on_game_over() -> void:
 	game_over_animation_timer.start()
 	MusicManager.gameplay.set_parameter("NormalGameplaySongPitch", -1.0)
 	alive_to_dead_music_timer.start()
-		
+
 
 func _on_asteroid_timer_timeout() -> void:
 	if is_paused:
@@ -186,7 +187,7 @@ func _on_resume_pressed() -> void:
 	pause_settings_button.disabled = true
 	pause_main_menu_button.disabled = true
 	is_paused = false
-	
+
 
 func _on_settings_pressed() -> void:
 	SFXManager.click.play()

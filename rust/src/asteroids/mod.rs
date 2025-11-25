@@ -1,4 +1,4 @@
-mod asteroid;
-mod asteroid_big;
-mod asteroid_medium;
-mod asteroid_small;
+pub mod asteroid;
+pub mod asteroid_big;
+pub mod asteroid_medium;
+pub mod asteroid_small;

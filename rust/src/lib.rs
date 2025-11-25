@@ -6,6 +6,7 @@ mod camera_manager;
 mod global_settings;
 mod main_scene;
 mod player;
+mod settings_scene;
 mod window_manager;
 
 struct MyExtension;
