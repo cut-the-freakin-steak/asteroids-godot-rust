@@ -79,20 +79,20 @@ pub struct Main {
     #[init(val = OnReady::manual())]
     game_scene: OnReady<Gd<PackedScene>>,
 
-    #[init(val = OnReady::manual())]
-    small_ast_scene: OnReady<Gd<PackedScene>>,
+    #[init(val = ResourceLoader::singleton().load("res://scenes/asteroid-small.tscn").unwrap().cast::<PackedScene>())]
+    small_ast_scene: Gd<PackedScene>,
 
-    #[init(val = OnReady::manual())]
-    medium_ast_scene: OnReady<Gd<PackedScene>>,
+    #[init(val = ResourceLoader::singleton().load("res://scenes/asteroid-medium.tscn").unwrap().cast::<PackedScene>())]
+    medium_ast_scene: Gd<PackedScene>,
 
-    #[init(val = OnReady::manual())]
-    big_ast_scene: OnReady<Gd<PackedScene>>,
+    #[init(val = ResourceLoader::singleton().load("res://scenes/asteroid-big.tscn").unwrap().cast::<PackedScene>())]
+    big_ast_scene: Gd<PackedScene>,
 
     #[init(val = OnReady::manual())]
     laser: OnReady<Gd<PackedScene>>,
 
     #[init(val = OnReady::manual())]
-    asteroids: OnReady<VariantArray>, // array of PackedScenes
+    asteroids: OnReady<Array<Gd<PackedScene>>>, // array of PackedScenes
 
     // miscellaneous variables
     #[init(val = false)]
@@ -152,27 +152,6 @@ impl INode2D for Main {
                     .cast::<PackedScene>(),
             );
 
-            self.small_ast_scene.init(
-                loader
-                    .load("res://scenes/asteroid-small.tscn")
-                    .unwrap()
-                    .cast::<PackedScene>(),
-            );
-
-            self.medium_ast_scene.init(
-                loader
-                    .load("res://scenes/asteroid-medium.tscn")
-                    .unwrap()
-                    .cast::<PackedScene>(),
-            );
-
-            self.big_ast_scene.init(
-                loader
-                    .load("res://scenes/asteroid-big.tscn")
-                    .unwrap()
-                    .cast::<PackedScene>(),
-            );
-
             self.laser.init(
                 loader
                     .load("res://scenes/bullet.tscn")
@@ -180,10 +159,10 @@ impl INode2D for Main {
                     .cast::<PackedScene>(),
             );
 
-            self.asteroids.init(varray![
-                self.small_ast_scene,
-                self.medium_ast_scene,
-                self.big_ast_scene
+            self.asteroids.init(array![
+                &self.small_ast_scene,
+                &self.medium_ast_scene,
+                &self.big_ast_scene,
             ]);
         }
 
@@ -299,6 +278,7 @@ impl INode2D for Main {
             lasers_node.add_child(&new_laser);
             self.player.bind_mut().shoot_timer.start();
         }
+
         self.score_label
             .set_text(&format!("Score: {}", self.score).to_godot());
 
@@ -353,7 +333,7 @@ impl INode2D for Main {
                     .get_node_as::<Marker2D>("ShootOrigin")
                     .get_global_position(),
             );
-            self.base().get_node_as("Lasers");
+            // self.base().get_node_as("Lasers");
         }
 
         // if Input.is_action_just_pressed("shoot") and player.alive and player.shoot_timer.time_left == 0:
@@ -480,8 +460,6 @@ impl Main {
                 .asteroids
                 .get(randi_range(0, 2) as usize)
                 .unwrap()
-                .try_to::<Gd<PackedScene>>()
-                .unwrap()
                 .instantiate()
                 .unwrap()
                 .cast::<Area2D>();
@@ -560,8 +538,6 @@ impl Main {
             .get_root()
             .unwrap()
             .add_child(&self.settings_scene.instantiate().unwrap().cast::<Control>());
-
-        // get_tree().get_root().add_child(settings_scene.instantiate())
     }
 
     // signal connection

@@ -38,9 +38,6 @@ pub struct Player {
     #[init(node = "IFrameTimer")]
     i_frame_timer: OnReady<Gd<Timer>>,
 
-    #[init(node = "ShootTimer")]
-    pub shoot_timer: OnReady<Gd<Timer>>,
-
     #[init(val = OnReady::manual())]
     screen_size: OnReady<f32>,
 

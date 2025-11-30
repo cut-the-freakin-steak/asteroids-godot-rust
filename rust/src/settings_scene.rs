@@ -1,6 +1,9 @@
 use godot::classes::{CheckButton, Control, DisplayServer, Engine, HSlider, IControl, Node2D};
 use godot::prelude::*;
 
+use crate::global_settings::SettingsClass;
+use crate::main_scene::Main;
+
 #[derive(GodotClass)]
 #[class(init, base = Control)]
 pub struct SettingsScene {
@@ -10,7 +13,7 @@ pub struct SettingsScene {
     main_menu_node: OnReady<Gd<Control>>,
 
     #[init(val = OnReady::manual())]
-    game_scene_node: OnReady<Gd<Node2D>>,
+    game_scene_node: OnReady<Gd<Main>>,
 
     #[init(node = ".")]
     scene_root_node: OnReady<Gd<Control>>,
@@ -41,8 +44,11 @@ pub struct SettingsScene {
 
     #[init(val = OnReady::manual())]
     sfx_bus: OnReady<Gd<RefCounted>>,
-    // @onready var main_menu_node: Control = get_node("/root").get_node_or_null("MainMenu")
-    // @onready var game_scene_node: Node2D = get_node("/root").get_node_or_null("Main")
+
+    // singletons
+    #[allow(non_snake_case)]
+    #[init(node = "/root/Settings")]
+    Settings: OnReady<Gd<SettingsClass>>,
 }
 
 #[godot_api]
@@ -81,6 +87,15 @@ impl IControl for SettingsScene {
                     .unwrap(),
             );
         }
+
+        // FIX: ts is not correct, whenever you make main_scene.rs, change this control node to be
+        // a MainScene node
+        let main_menu_node_init = self.base().get_node_as::<Control>("/root/MainMenu");
+        self.main_menu_node.init(main_menu_node_init);
+
+        let game_scene_node_init = self.base().get_node_as::<Main>("/root/Main");
+        self.game_scene_node.init(game_scene_node_init);
+
         // match Settings.vsync_on:
         //     true:
         //         DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
@@ -117,7 +132,7 @@ impl IControl for SettingsScene {
 
 #[godot_api]
 impl SettingsScene {
-    #[func]
+    // #[func]
     pub fn exit_settings(&mut self) {
         // Settings.save_settings()
         //
@@ -141,13 +156,13 @@ impl SettingsScene {
     }
 
     // NOTE: miscellaneous settings
-    #[func]
+    // #[func]
     fn _on_return_pressed(&self) {
         // SFXManager.click.play()
         // exit_settings()
     }
 
-    #[func]
+    // #[func]
     fn _on_v_sync_toggle_toggled(&self, toggled_on: bool) {
         // SFXManager.click.play()
         //
@@ -162,7 +177,7 @@ impl SettingsScene {
         // Settings.save_settings()
     }
 
-    #[func]
+    // #[func]
     fn _on_screen_shake_toggle_toggled(&self, toggled_on: bool) {
         // SFXManager.click.play()
         //
@@ -175,7 +190,7 @@ impl SettingsScene {
         // Settings.save_settings()
     }
 
-    #[func]
+    // #[func]
     fn _on_hurricane_mode_toggle_toggled(&self, toggled_on: bool) {
         // SFXManager.click.play()
         //
@@ -189,25 +204,25 @@ impl SettingsScene {
     }
 
     // NOTE: audio settings
-    #[func]
+    // #[func]
     fn _on_master_slider_value_changed(&self, value: f32) {
         // Settings.master_volume = value
         // master_bus.volume = Settings.master_volume
     }
 
-    #[func]
+    // #[func]
     fn _on_music_slider_value_changed(&self, value: f32) {
         // Settings.music_volume = value
         // music_bus.volume = Settings.music_volume
     }
 
-    #[func]
+    // #[func]
     fn _on_sfx_slider_value_changed(&self, value: f32) {
         // Settings.sfx_volume = value
         // sfx_bus.volume = Settings.sfx_volume
     }
 
-    #[func]
+    // #[func]
     fn disappear_node(&self, node: Node) {
         // node.visible = false
         //
@@ -216,6 +231,7 @@ impl SettingsScene {
         //     button.disabled = true
     }
 
+    // #[func]
     fn appear_node(&self, node: Node) {
         // node.visible = true
         //

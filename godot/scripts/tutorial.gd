@@ -9,7 +9,7 @@ func _process(_delta) -> void:
 
 		if main_menu_node != null:
 			appear_node(main_menu_node)
-				
+
 		queue_free()
 
 
