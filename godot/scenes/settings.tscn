@@ -555,29 +555,29 @@ cache/0/24/0/glyphs/92/size = Vector2(12, 17)
 cache/0/24/0/glyphs/92/uv_rect = Rect2(44, 1, 12, 17)
 cache/0/24/0/glyphs/92/texture_idx = 0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_am25x"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4ppmf"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1g033"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uhhto"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1g033"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4ppmf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_am25x"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_r6d6q"]
 font = ExtResource("1_5p8wc")
 font_size = 30
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6wm04"]
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r6d6q"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6wm04"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_6wm04"]
 font = ExtResource("1_5p8wc")
 font_size = 30
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f4mfi"]
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_es4n0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f4mfi"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_f4mfi"]
 font = ExtResource("1_5p8wc")
@@ -610,10 +610,10 @@ anchor_right = 0.295
 anchor_bottom = 0.995
 theme_override_fonts/font = SubResource("FontFile_gjs24")
 theme_override_font_sizes/font_size = 25
-theme_override_styles/focus = SubResource("StyleBoxEmpty_am25x")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_4ppmf")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_uhhto")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1g033")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_uhhto")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_4ppmf")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_am25x")
 text = "return"
 metadata/_edit_use_anchors_ = true
 
@@ -643,8 +643,8 @@ anchor_bottom = 0.867948
 offset_left = -1.0
 offset_top = -0.00400019
 offset_bottom = 0.0180016
-theme_override_styles/focus = SubResource("StyleBoxEmpty_6wm04")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_r6d6q")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6wm04")
 metadata/_edit_use_anchors_ = true
 
 [node name="ScreenShake" type="Label" parent="."]
@@ -672,8 +672,8 @@ anchor_right = 1.416
 anchor_bottom = 0.921
 offset_top = -0.00400019
 offset_bottom = 0.0019989
-theme_override_styles/focus = SubResource("StyleBoxEmpty_6wm04")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_r6d6q")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6wm04")
 button_pressed = true
 metadata/_edit_use_anchors_ = true
 
@@ -702,8 +702,8 @@ anchor_right = 1.416
 anchor_bottom = 0.921
 offset_top = -0.00400019
 offset_bottom = 0.0019989
-theme_override_styles/focus = SubResource("StyleBoxEmpty_f4mfi")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_es4n0")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_f4mfi")
 metadata/_edit_use_anchors_ = true
 
 [node name="Audio" type="Label" parent="."]

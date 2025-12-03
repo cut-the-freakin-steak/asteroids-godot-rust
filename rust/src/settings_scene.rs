@@ -1,4 +1,6 @@
-use godot::classes::{CheckButton, Control, DisplayServer, Engine, HSlider, IControl, Node2D};
+use godot::classes::{
+    CheckButton, Control, DisplayServer, Engine, HSlider, IControl, Input, Node2D,
+};
 use godot::prelude::*;
 
 use crate::global_settings::SettingsClass;
@@ -15,8 +17,8 @@ pub struct SettingsScene {
     #[init(val = OnReady::manual())]
     game_scene_node: OnReady<Gd<Main>>,
 
-    #[init(node = ".")]
-    scene_root_node: OnReady<Gd<Control>>,
+    #[init(val = OnReady::manual())]
+    scene_root_node: OnReady<Gd<Node>>,
 
     #[init(node = "NodePath")]
     vsync_toggle: OnReady<Gd<CheckButton>>,
@@ -54,8 +56,13 @@ pub struct SettingsScene {
 #[godot_api]
 impl IControl for SettingsScene {
     fn process(&mut self, _delta: f64) {
-        // if Input.is_action_just_pressed("esc"):
-        //     exit_settings()
+        self.scene_root_node
+            .init(self.base().get_tree().unwrap().get_current_scene().unwrap());
+
+        let input = Input::singleton();
+        if input.is_action_just_pressed("esc") {
+            self.exit_settings();
+        }
     }
 
     fn ready(&mut self) {
