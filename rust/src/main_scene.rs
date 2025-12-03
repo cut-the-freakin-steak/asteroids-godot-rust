@@ -1,3 +1,5 @@
+// NOTE: finally done with this file
+
 use crate::asteroids::asteroid::AsteroidSize;
 use crate::asteroids::{asteroid_medium::MediumAsteroid, asteroid_small::SmallAsteroid};
 use crate::audio::music_manager::MusicManagerClass;
@@ -55,16 +57,16 @@ pub struct Main {
     pause_ui: OnReady<Gd<Control>>,
 
     #[init(node = "UI/PauseUI/Pause")]
-    pause_label: OnReady<Gd<Label>>,
+    pub pause_label: OnReady<Gd<Label>>,
 
     #[init(node = "UI/PauseUI/Resume")]
-    resume_button: OnReady<Gd<Button>>,
+    pub resume_button: OnReady<Gd<Button>>,
 
     #[init(node = "UI/PauseUI/Settings")]
-    pause_settings_button: OnReady<Gd<Button>>,
+    pub pause_settings_button: OnReady<Gd<Button>>,
 
     #[init(node = "UI/PauseUI/MainMenu")]
-    pause_main_menu_button: OnReady<Gd<Button>>,
+    pub pause_main_menu_button: OnReady<Gd<Button>>,
 
     #[init(node = "AliveToDeadMusicTimer")]
     alive_to_dead_music_timer: OnReady<Gd<Timer>>,
@@ -264,6 +266,7 @@ impl INode2D for Main {
                 gameplay_song.call("play", &[false.to_variant()]);
             }
         }
+
         if input.is_action_just_pressed("shoot")
             && self.player.bind().alive
             && self.player.bind().shoot_timer.get_time_left() == 0.0
@@ -274,7 +277,7 @@ impl INode2D for Main {
                     .get_node_as::<Marker2D>("ShootOrigin")
                     .get_global_position(),
             );
-            let mut lasers_node = self.base().get_node_as::<Node>("Laser");
+            let mut lasers_node = self.base().get_node_as::<Node>("Lasers");
             lasers_node.add_child(&new_laser);
             self.player.bind_mut().shoot_timer.start();
         }
@@ -322,39 +325,6 @@ impl INode2D for Main {
         if self.Settings.bind().hurricane_mode {
             self.camera_manager.bind_mut().screen_shake(3.5, 0.2);
         }
-
-        if input.is_action_just_pressed("shoot")
-            && self.player.bind().alive
-            && self.player.bind().shoot_timer.get_time_left() == 0.0
-        {
-            let mut new_laser = self.laser.instantiate().unwrap().cast::<CharacterBody2D>();
-            new_laser.set_global_position(
-                self.player
-                    .get_node_as::<Marker2D>("ShootOrigin")
-                    .get_global_position(),
-            );
-            // self.base().get_node_as("Lasers");
-        }
-
-        // if Input.is_action_just_pressed("shoot") and player.alive and player.shoot_timer.time_left == 0:
-        //     $Lasers.add_child(new_laser)
-        //     player.shoot_timer.start()
-        //
-        // score_label.text = "Score: " + str(score)
-        //
-        // if is_game_over and not game_over_buttons_animation.is_playing() and Input.is_action_just_pressed("skip_animation"):
-        //     game_over_anim_skipped = true
-        //     ui_animation.stop()
-        //     try_again_button.visible = true
-        //     main_menu_button.visible = true
-        //     game_over_text.modulate.a = 1.0
-        //     try_again_button.modulate.a = 1.0
-        //     main_menu_button.modulate.a = 1.0
-        //     game_over_label_animation.play("idle")
-        //     game_over_buttons_animation.play("idle")
-        //
-        // if Settings.hurricane_mode:
-        //     camera_manager.screen_shake(3.5, 0.2)
     }
 }
 
@@ -542,9 +512,24 @@ impl Main {
 
     // signal connection
     #[func]
-    fn _on_try_again_pressed(&mut self) {}
+    fn _on_try_again_pressed(&mut self) {
+        self.SFXManager.bind_mut().click.call("play", &[]);
+        let game_scene = self.game_scene.clone();
+        self.base_mut()
+            .get_tree()
+            .unwrap()
+            .change_scene_to_packed(&game_scene);
+    }
 
     // signal connection
     #[func]
-    fn _on_main_menu_pressed(&mut self) {}
+    fn _on_main_menu_pressed(&mut self) {
+        self.MusicManager.bind_mut().gameplay.call("stop", &[]);
+        self.SFXManager.bind_mut().click.call("play", &[]);
+        let main_menu_scene = self.main_menu_scene.clone();
+        self.base_mut()
+            .get_tree()
+            .unwrap()
+            .change_scene_to_packed(&main_menu_scene);
+    }
 }

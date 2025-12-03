@@ -15,12 +15,9 @@
 - [x] splash_screen
 - [x] tutorial
 - [x] window_manager
+- [x] settings_scene
+- [x] main_scene
 
 ## not done
-
-- [ ] main_scene
-- [ ] settings_scene
-
-## not created yet
 
 - [ ] asdf
