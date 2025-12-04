@@ -186,7 +186,7 @@ impl Asteroid {
 #[derive(PartialEq, GodotConvert, Debug, Clone)]
 #[godot(via = i32)]
 pub enum AsteroidSize {
-    Small = 0,
-    Medium = 1,
-    Big = 2,
+    Small,
+    Medium,
+    Big,
 }

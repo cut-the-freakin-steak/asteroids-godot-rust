@@ -20,6 +20,9 @@ pub struct BigAsteroid {
     #[init(val = OnReady::manual())]
     camera_manager: OnReady<Gd<CameraManager>>,
 
+    #[allow(dead_code)]
+    // because of the way emitting signals works, this is technically never
+    // used, but it is, trust
     #[init(val = AsteroidSize::Big)]
     asteroid_size: AsteroidSize,
 }

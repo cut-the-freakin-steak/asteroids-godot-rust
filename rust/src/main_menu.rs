@@ -56,15 +56,19 @@ pub struct MainMenu {
     #[init(node = "YesQuit")]
     yes_quit: OnReady<Gd<Button>>,
 
+    #[allow(dead_code)] // this is literally used????
     #[init(val = ResourceLoader::singleton().load("res://scenes/main.tscn").unwrap().cast::<PackedScene>())]
     game_scene: Gd<PackedScene>,
 
+    #[allow(dead_code)] // this is literally used????
     #[init(val = ResourceLoader::singleton().load("res://scenes/settings.tscn").unwrap().cast::<PackedScene>())]
     settings_scene: Gd<PackedScene>,
 
+    #[allow(dead_code)] // this is literally used????
     #[init(val = ResourceLoader::singleton().load("res://scenes/tutorial.tscn").unwrap().cast::<PackedScene>())]
     tutorial_scene: Gd<PackedScene>,
 
+    #[allow(dead_code)] // this is literally used????
     #[init(val = ResourceLoader::singleton().load("res://scenes/credits.tscn").unwrap().cast::<PackedScene>())]
     credits_scene: Gd<PackedScene>,
 
@@ -177,6 +181,10 @@ impl IControl for MainMenu {
 
 #[godot_api]
 impl MainMenu {
+    // NOTE: i coded the following 3 functions for the original project but i guess i never used
+    // them??? so i guess ill just translate them and never use them here too.
+
+    #[allow(dead_code)]
     fn start_animations(&mut self) {
         self.ui_animation.play_ex().name("ascend_title").done();
         if !self.play_button.is_visible() {
@@ -184,10 +192,12 @@ impl MainMenu {
         }
     }
 
+    #[allow(dead_code)]
     fn start_title_idle(&mut self) {
         self.title_idle_animation.play_ex().name("idle").done();
     }
 
+    #[allow(dead_code)]
     fn start_button_idle(&mut self) {
         self.button_animation.play_ex().name("idle").done();
     }
@@ -321,6 +331,7 @@ impl MainMenu {
         // get_tree().get_root().add_child(credits_scene.instantiate())
     }
 
+    #[allow(dead_code)]
     fn disappear_node(&mut self, mut node: Gd<Control>) {
         node.set_visible(false);
 
@@ -331,6 +342,7 @@ impl MainMenu {
         }
     }
 
+    #[allow(dead_code)]
     fn appear_node(&self, mut node: Gd<Control>) {
         node.set_visible(true);
 

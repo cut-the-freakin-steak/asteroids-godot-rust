@@ -66,6 +66,7 @@ impl INode for CameraManager {
 
 #[godot_api]
 impl CameraManager {
+    #[func]
     pub fn screen_shake(&mut self, intensity: f32, time: f32) {
         let screen_shake_setting = self.Settings.get("screen_shake_on").to::<bool>();
 

@@ -14,6 +14,7 @@ pub struct SmallAsteroid {
     #[init(node = "Asteroid")]
     pub ast_base: OnReady<Gd<Asteroid>>,
 
+    #[allow(dead_code)]
     #[init(val = AsteroidSize::Small)]
     asteroid_size: AsteroidSize,
 }

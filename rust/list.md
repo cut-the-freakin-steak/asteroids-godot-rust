@@ -17,7 +17,8 @@
 - [x] window_manager
 - [x] settings_scene
 - [x] main_scene
+- [x] bullet
 
 ## not done
 
-- [ ] bullet
+none..?
