@@ -1,6 +1,5 @@
-[gd_scene load_steps=15 format=4 uid="uid://da7kj8yu8b3bu"]
+[gd_scene load_steps=14 format=4 uid="uid://da7kj8yu8b3bu"]
 
-[ext_resource type="Script" uid="uid://boqpv7p1ulhic" path="res://scripts/credits.gd" id="1_2ckv8"]
 [ext_resource type="FontFile" uid="uid://cxndbgxf3g7sc" path="res://assets/Brush Script.ttf" id="2_0ctdu"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_2fbfq"]
@@ -443,23 +442,20 @@ cache/0/18/0/glyphs/81/size = Vector2(9, 9)
 cache/0/18/0/glyphs/81/uv_rect = Rect2(74, 1, 9, 9)
 cache/0/18/0/glyphs/81/texture_idx = 0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mah5v"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kyhnv"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ih6pn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ooihk"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ih6pn"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kyhnv"]
 
-[node name="Credits" type="Control" node_paths=PackedStringArray("scene_root_node")]
-layout_mode = 3
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mah5v"]
+
+[node name="Credits" type="Credits"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_2ckv8")
-scene_root_node = NodePath(".")
 
 [node name="CreditsText" type="Label" parent="."]
 layout_mode = 1
@@ -468,7 +464,7 @@ anchor_top = -0.025
 anchor_right = 1.0
 anchor_bottom = 0.975
 text = "i, cristian, aka steak, made this game and most of its assets and it was pretty fun i guess.
-special thanks to beta testers, you guy's are lifesavers, my family, and my friends, ya'll are awesome.
+special thanks to beta testers, you guy's are lifesavers, my family, and my friends, y'all are awesome.
 i stole both (yes, both, tee-hee-hee) splash screen jingles from Toby Fox, so thanks to him for that, please play his games and listen to his music he is very cool."
 label_settings = SubResource("LabelSettings_2fbfq")
 horizontal_alignment = 1
@@ -477,6 +473,7 @@ autowrap_mode = 3
 metadata/_edit_use_anchors_ = true
 
 [node name="Return" type="Button" parent="." groups=["button"]]
+layout_mode = 0
 offset_left = -29.0
 offset_top = 168.0
 offset_right = 82.0
@@ -484,10 +481,8 @@ offset_bottom = 214.0
 pivot_offset = Vector2(52, 23)
 theme_override_fonts/font = SubResource("FontFile_8gwij")
 theme_override_font_sizes/font_size = 18
-theme_override_styles/focus = SubResource("StyleBoxEmpty_mah5v")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_kyhnv")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_ooihk")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ih6pn")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_ooihk")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_kyhnv")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mah5v")
 text = "return"
-
-[connection signal="pressed" from="Return" to="." method="_on_return_pressed"]

@@ -1,11 +1,9 @@
-[gd_scene load_steps=64 format=4 uid="uid://bom7t7eaqjcyn"]
+[gd_scene load_steps=62 format=4 uid="uid://bom7t7eaqjcyn"]
 
-[ext_resource type="Script" uid="uid://dtu70e44iapa0" path="res://scripts/main.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://dxsu0lyfisjgy" path="res://scenes/player.tscn" id="2_0wfyh"]
 [ext_resource type="Texture2D" uid="uid://bfxgp3dt64uc6" path="res://assets/sprites/player.png" id="3_sugp2"]
 [ext_resource type="FontFile" uid="uid://cxndbgxf3g7sc" path="res://assets/Brush Script.ttf" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="4_o6xl0"]
-[ext_resource type="Script" uid="uid://8nhhn8h8kl4r" path="res://scripts/camera_manager.gd" id="5_85g3d"]
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="5_tipki"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="6_85g3d"]
 [ext_resource type="Texture2D" uid="uid://dxmccitojtrmd" path="res://assets/sprites/player-piece-1.png" id="8_ya4ey"]
@@ -1099,8 +1097,7 @@ font_size = 20
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tefeu"]
 
-[node name="Main" type="Node2D" groups=["main_scene"]]
-script = ExtResource("1_o5qli")
+[node name="Main" type="Main" groups=["main_scene"]]
 
 [node name="AsteroidMarkers" type="Node" parent="."]
 
@@ -1193,7 +1190,6 @@ process_physics_priority = 300
 script = ExtResource("4_o6xl0")
 
 [node name="CameraManager" type="CameraManager" parent="."]
-script = ExtResource("5_85g3d")
 
 [node name="PhantomCamera2D" type="Node2D" parent="CameraManager"]
 position = Vector2(100, 100)
@@ -1410,12 +1406,3 @@ one_shot = true
 [node name="AliveToDeadMusicTimer" type="Timer" parent="."]
 wait_time = 0.75
 one_shot = true
-
-[connection signal="timeout" from="AsteroidTimer" to="." method="_on_asteroid_timer_timeout"]
-[connection signal="pressed" from="UI/PauseUI/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="UI/PauseUI/Settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="UI/PauseUI/MainMenu" to="." method="_on_main_menu_pressed"]
-[connection signal="pressed" from="UI/TryAgain" to="." method="_on_try_again_pressed"]
-[connection signal="pressed" from="UI/MainMenu" to="." method="_on_main_menu_pressed"]
-[connection signal="timeout" from="UI/GameOverAnimTimer" to="." method="_on_game_over_anim_timer_timeout"]
-[connection signal="timeout" from="AliveToDeadMusicTimer" to="." method="_on_alive_to_dead_music_timer_timeout"]

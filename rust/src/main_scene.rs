@@ -71,6 +71,9 @@ pub struct Main {
     #[init(node = "AliveToDeadMusicTimer")]
     alive_to_dead_music_timer: OnReady<Gd<Timer>>,
 
+    #[init(node = "AsteroidTimer")]
+    asteroid_timer: OnReady<Gd<Timer>>,
+
     // scenes
     #[init(val = OnReady::manual())]
     main_menu_scene: OnReady<Gd<PackedScene>>,
@@ -167,37 +170,75 @@ impl INode2D for Main {
                 &self.big_ast_scene,
             ]);
         }
+        {
+            if self.Settings.bind().hurricane_mode {
+                self.MusicManager.bind_mut().gameplay.call(
+                    "set_parameter",
+                    &["WhichGameplaySong".to_variant(), "Hurricane".to_variant()],
+                );
+            }
+            else {
+                self.MusicManager.bind_mut().gameplay.call(
+                    "set_parameter",
+                    &["WhichGameplaySong".to_variant(), "Normal".to_variant()],
+                );
+            }
 
-        if self.Settings.bind().hurricane_mode {
             self.MusicManager.bind_mut().gameplay.call(
                 "set_parameter",
-                &["WhichGameplaySong".to_variant(), "Hurricane".to_variant()],
+                &["MuffledOrNot".to_variant(), 1.0.to_variant()],
             );
-        }
-        else {
+
             self.MusicManager.bind_mut().gameplay.call(
                 "set_parameter",
-                &["WhichGameplaySong".to_variant(), "Normal".to_variant()],
+                &["NormalGameplaySongPitch".to_variant(), 0.0.to_variant()],
             );
+
+            self.score = 0;
+            self.is_game_over = false;
+            self.game_over_anim_skipped = false;
         }
-
-        self.MusicManager.bind_mut().gameplay.call(
-            "set_parameter",
-            &["MuffledOrNot".to_variant(), 1.0.to_variant()],
-        );
-
-        self.MusicManager.bind_mut().gameplay.call(
-            "set_parameter",
-            &["NormalGameplaySongPitch".to_variant(), 0.0.to_variant()],
-        );
-
-        self.score = 0;
-        self.is_game_over = false;
-        self.game_over_anim_skipped = false;
-        self.signals().game_over().connect_self(Self::_on_game_over);
+        // signal stuff
         self.signals()
             .asteroid_hit()
             .connect_self(Self::_spawn_asteroid);
+
+        self.signals().game_over().connect_self(Self::_on_game_over);
+
+        self.asteroid_timer
+            .signals()
+            .timeout()
+            .connect_other(self, Self::_on_asteroid_timer_timeout);
+
+        self.game_over_animation_timer
+            .signals()
+            .timeout()
+            .connect_other(self, Self::_on_game_over_anim_timer_timeout);
+
+        self.alive_to_dead_music_timer
+            .signals()
+            .timeout()
+            .connect_other(self, Self::_on_alive_to_dead_music_timer_timeout);
+
+        self.resume_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_resume_pressed);
+
+        self.pause_settings_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_settings_pressed);
+
+        self.try_again_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_try_again_pressed);
+
+        self.main_menu_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_main_menu_pressed);
     }
 
     fn process(&mut self, _delta: f64) {

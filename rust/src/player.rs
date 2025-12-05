@@ -59,8 +59,9 @@ pub struct Player {
     #[init(val = false)]
     ship_on_screen_border_y: bool,
 
-    // #[init(val = Vector2::ZERO)]
-    // last_direction_faced: Vector2,
+    #[init(val = Vector2::ZERO)]
+    last_direction_faced: Vector2,
+
     #[init(val = 3)]
     hp: i32,
 

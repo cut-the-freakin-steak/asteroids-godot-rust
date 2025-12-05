@@ -1,6 +1,5 @@
-[gd_scene load_steps=15 format=4 uid="uid://brbj3h75c8dgw"]
+[gd_scene load_steps=14 format=4 uid="uid://brbj3h75c8dgw"]
 
-[ext_resource type="Script" uid="uid://bsnbx1k67bmio" path="res://scripts/tutorial.gd" id="1_8ho6b"]
 [ext_resource type="FontFile" uid="uid://cxndbgxf3g7sc" path="res://assets/Brush Script.ttf" id="1_c13y7"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_8ho6b"]
@@ -443,23 +442,20 @@ cache/0/18/0/glyphs/81/size = Vector2(9, 9)
 cache/0/18/0/glyphs/81/uv_rect = Rect2(74, 1, 9, 9)
 cache/0/18/0/glyphs/81/texture_idx = 0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4kmhl"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cq4me"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gbqnl"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6yjpi"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gbqnl"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cq4me"]
 
-[node name="Tutorial" type="Control" node_paths=PackedStringArray("scene_root_node")]
-layout_mode = 3
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4kmhl"]
+
+[node name="Tutorial" type="Tutorial"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_8ho6b")
-scene_root_node = NodePath(".")
 metadata/_edit_use_anchors_ = true
 
 [node name="TutorialText" type="Label" parent="."]
@@ -487,10 +483,8 @@ offset_bottom = 214.0
 pivot_offset = Vector2(52, 23)
 theme_override_fonts/font = SubResource("FontFile_ph3nu")
 theme_override_font_sizes/font_size = 18
-theme_override_styles/focus = SubResource("StyleBoxEmpty_4kmhl")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_cq4me")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_6yjpi")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_gbqnl")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_6yjpi")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_cq4me")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4kmhl")
 text = "return"
-
-[connection signal="pressed" from="Return" to="." method="_on_return_pressed"]

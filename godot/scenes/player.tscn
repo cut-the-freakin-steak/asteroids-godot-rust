@@ -64,5 +64,3 @@ one_shot = true
 [node name="IFrameTimer" type="Timer" parent="."]
 wait_time = 2.0
 one_shot = true
-
-[connection signal="timeout" from="IFrameTimer" to="." method="_on_i_frame_timer_timeout"]

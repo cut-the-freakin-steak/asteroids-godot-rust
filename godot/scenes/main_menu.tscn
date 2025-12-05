@@ -1,6 +1,5 @@
-[gd_scene load_steps=55 format=4 uid="uid://bxi5xb2fhp7qs"]
+[gd_scene load_steps=54 format=4 uid="uid://bxi5xb2fhp7qs"]
 
-[ext_resource type="Script" uid="uid://cdmenooby1ky4" path="res://scripts/main_menu.gd" id="1_ekxnf"]
 [ext_resource type="FontFile" uid="uid://cxndbgxf3g7sc" path="res://assets/Brush Script.ttf" id="1_l6cm7"]
 
 [sub_resource type="Animation" id="Animation_bqqt6"]
@@ -2395,23 +2394,10 @@ cache/0/50/0/glyphs/69/texture_idx = 0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hstxw"]
 
-[node name="MainMenu" type="Control" node_paths=PackedStringArray("ui_animation", "title_idle_animation", "button_animation", "title", "play_button", "settings_button", "quit_button", "tutorial_button", "credits_button", "are_you_sure", "no_quit", "yes_quit")]
-layout_mode = 3
+[node name="MainMenu" type="MainMenu"]
+anchors_preset = -1
 anchor_left = -0.005
 anchor_right = -0.005
-script = ExtResource("1_ekxnf")
-ui_animation = NodePath("UI")
-title_idle_animation = NodePath("TitleIdle")
-button_animation = NodePath("Buttons")
-title = NodePath("Title")
-play_button = NodePath("Play")
-settings_button = NodePath("Settings")
-quit_button = NodePath("Quit")
-tutorial_button = NodePath("Tutorial")
-credits_button = NodePath("Credits")
-are_you_sure = NodePath("AreYouSure")
-no_quit = NodePath("NoQuit")
-yes_quit = NodePath("YesQuit")
 metadata/_edit_use_anchors_ = true
 
 [node name="AsteroidMarkers" type="Node" parent="."]
@@ -2634,13 +2620,3 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_hstxw")
 disabled = true
 text = "yes"
 metadata/_edit_use_anchors_ = true
-
-[connection signal="timeout" from="AsteroidTimer" to="." method="_on_asteroid_timer_timeout"]
-[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="Settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="Tutorial" to="." method="_on_tutorial_pressed"]
-[connection signal="pressed" from="Credits" to="." method="_on_credits_pressed"]
-[connection signal="pressed" from="AreYouSure" to="." method="_on_are_you_sure_pressed"]
-[connection signal="pressed" from="NoQuit" to="." method="_on_no_quit_pressed"]
-[connection signal="pressed" from="YesQuit" to="." method="_on_yes_quit_pressed"]

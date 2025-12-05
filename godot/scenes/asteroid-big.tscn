@@ -1,6 +1,5 @@
-[gd_scene load_steps=13 format=3 uid="uid://cidtkwh20lw2t"]
+[gd_scene load_steps=12 format=3 uid="uid://cidtkwh20lw2t"]
 
-[ext_resource type="Script" uid="uid://choi4nouti1wy" path="res://scripts/asteroid-big.gd" id="1_osnpa"]
 [ext_resource type="Texture2D" uid="uid://qxdfhr1lvyg7" path="res://assets/sprites/asteroid-big.png" id="1_px3sp"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_osnpa"]
@@ -48,7 +47,6 @@ color_initial_ramp = SubResource("GradientTexture1D_81r1n")
 alpha_curve = SubResource("CurveTexture_vcop2")
 
 [node name="BigAsteroid" type="BigAsteroid" groups=["asteroid"]]
-script = ExtResource("1_osnpa")
 
 [node name="Asteroid" type="Asteroid" parent="."]
 
@@ -70,5 +68,3 @@ process_material = SubResource("ParticleProcessMaterial_iv480")
 
 [node name="ExplosionToQueueFree" type="Timer" parent="."]
 wait_time = 0.8
-
-[connection signal="timeout" from="ExplosionToQueueFree" to="." method="_on_explosion_to_queue_free_timeout"]

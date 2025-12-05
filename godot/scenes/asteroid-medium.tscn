@@ -68,5 +68,3 @@ process_material = SubResource("ParticleProcessMaterial_ppvf6")
 
 [node name="ExplosionToQueueFree" type="Timer" parent="."]
 wait_time = 0.8
-
-[connection signal="timeout" from="ExplosionToQueueFree" to="." method="_on_explosion_to_queue_free_timeout"]

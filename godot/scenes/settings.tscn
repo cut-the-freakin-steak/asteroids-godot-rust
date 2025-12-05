@@ -1,7 +1,6 @@
-[gd_scene load_steps=26 format=4 uid="uid://dh7ei7acq78el"]
+[gd_scene load_steps=25 format=4 uid="uid://dh7ei7acq78el"]
 
 [ext_resource type="FontFile" uid="uid://cxndbgxf3g7sc" path="res://assets/Brush Script.ttf" id="1_5p8wc"]
-[ext_resource type="Script" uid="uid://bigdygbktcrva" path="res://scripts/settings.gd" id="1_r6d6q"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_r6d6q"]
 light_mode = 1
@@ -583,22 +582,13 @@ font_size = 30
 font = ExtResource("1_5p8wc")
 font_size = 20
 
-[node name="Settings" type="Control" node_paths=PackedStringArray("scene_root_node", "vsync_toggle", "screen_shake_toggle", "hurricane_mode_toggle", "master_volume_slider", "music_volume_slider", "sfx_volume_slider")]
+[node name="Settings" type="SettingsScene"]
 custom_minimum_size = Vector2(3.52, -11.16)
-layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_r6d6q")
-scene_root_node = NodePath(".")
-vsync_toggle = NodePath("VSync/VSyncToggle")
-screen_shake_toggle = NodePath("ScreenShake/ScreenShakeToggle")
-hurricane_mode_toggle = NodePath("HurricaneMode/HurricaneModeToggle")
-master_volume_slider = NodePath("Audio/Master/MasterSlider")
-music_volume_slider = NodePath("Audio/Music/MusicSlider")
-sfx_volume_slider = NodePath("Audio/SFX/SFXSlider")
 
 [node name="Return" type="Button" parent="." groups=["button"]]
 material = SubResource("CanvasItemMaterial_r6d6q")
@@ -810,11 +800,3 @@ max_value = 2.0
 step = 0.01
 value = 1.0
 metadata/_edit_use_anchors_ = true
-
-[connection signal="pressed" from="Return" to="." method="_on_return_pressed"]
-[connection signal="toggled" from="VSync/VSyncToggle" to="." method="_on_v_sync_toggle_toggled"]
-[connection signal="toggled" from="ScreenShake/ScreenShakeToggle" to="." method="_on_screen_shake_toggle_toggled"]
-[connection signal="toggled" from="HurricaneMode/HurricaneModeToggle" to="." method="_on_hurricane_mode_toggle_toggled"]
-[connection signal="value_changed" from="Audio/Master/MasterSlider" to="." method="_on_master_slider_value_changed"]
-[connection signal="value_changed" from="Audio/Music/MusicSlider" to="." method="_on_music_slider_value_changed"]
-[connection signal="value_changed" from="Audio/SFX/SFXSlider" to="." method="_on_sfx_slider_value_changed"]

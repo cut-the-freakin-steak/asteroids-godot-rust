@@ -1,7 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://nn82a84m2gp2"]
+[gd_scene load_steps=13 format=3 uid="uid://nn82a84m2gp2"]
 
 [ext_resource type="Texture2D" uid="uid://ddaunji8gn6gm" path="res://assets/sprites/bullet.png" id="1_mkf8s"]
-[ext_resource type="Script" uid="uid://b0tti0lsmu2ou" path="res://scripts/bullet.gd" id="1_y25gk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y25gk"]
 size = Vector2(4, 5)
@@ -50,8 +49,7 @@ color_ramp = SubResource("GradientTexture1D_qncy5")
 color_initial_ramp = SubResource("GradientTexture1D_eoqba")
 alpha_curve = SubResource("CurveTexture_y25gk")
 
-[node name="Bullet" type="CharacterBody2D"]
-script = ExtResource("1_y25gk")
+[node name="Bullet" type="Bullet"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_mkf8s")
@@ -72,5 +70,3 @@ lifetime = 0.25
 one_shot = true
 explosiveness = 0.7
 process_material = SubResource("ParticleProcessMaterial_y25gk")
-
-[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

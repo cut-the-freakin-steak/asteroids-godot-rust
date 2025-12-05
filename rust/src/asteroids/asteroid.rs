@@ -1,7 +1,7 @@
 // NOTE: done with this file
 
 use godot::classes::{
-    Area2D, CollisionPolygon2D, GpuParticles2D, IArea2D, Marker2D, Node, Node2D, Sprite2D, Timer,
+    Area2D, CollisionPolygon2D, GpuParticles2D, IArea2D, Node, Node2D, Sprite2D, Timer,
 };
 use godot::global::{randi, randi_range, randomize};
 use godot::prelude::*;
@@ -20,7 +20,7 @@ pub struct Asteroid {
 
     // onreadys
     #[init(val = OnReady::manual())]
-    pub main: OnReady<Gd<main_scene::Main>>,
+    pub main: OnReady<Gd<Node>>,
 
     #[init(node = "../Sprite2D")]
     pub sprite: OnReady<Gd<Sprite2D>>,
@@ -60,34 +60,12 @@ impl AsteroidIFunctions for Asteroid {
     fn asteroid_ready(&mut self) {
         // NOTE: getting the scene tree and then current scene is a bit more
         // complicated in rust than in gdscript lmao
-        let main_scene;
-        match self.base().get_tree() {
-            Some(tree) => match tree.get_current_scene() {
-                Some(main) => main_scene = main.cast::<main_scene::Main>(),
-                None => panic!(),
-            },
-            None => panic!(),
-        };
+        let main_scene = self.base().get_tree().unwrap().get_current_scene().unwrap();
 
         self.main.init(main_scene);
 
         // rest of the ready function
         randomize();
-
-        if !self.use_set_position {
-            let asteroid_markers = self
-                .main
-                .get_node_as::<Node>("AsteroidMarkers")
-                .get_children();
-
-            let selected_asteroid_spawn = asteroid_markers
-                .get(randi() as usize % asteroid_markers.len())
-                .unwrap() // an invalid state here is irrepresentable.
-                .cast::<Marker2D>();
-
-            self.base_mut()
-                .set_position(selected_asteroid_spawn.get_position());
-        }
 
         let position = self.base().get_position();
         if position.x <= 50.0 {
@@ -97,6 +75,7 @@ impl AsteroidIFunctions for Asteroid {
             self.direction.x = -1.0;
         }
         else {
+            godot_print!("why x");
             let ones = array![-1.0, 1.0];
             self.direction.x = ones.get(randi() as usize % ones.len()).unwrap();
         }
@@ -108,6 +87,7 @@ impl AsteroidIFunctions for Asteroid {
             self.direction.y = -1.0;
         }
         else {
+            godot_print!("why y");
             let ones = array![-1.0, 1.0];
             self.direction.y = ones.get(randi() as usize % ones.len()).unwrap();
         }
@@ -125,24 +105,15 @@ impl AsteroidIFunctions for Asteroid {
             .connect_other(self, Self::_on_body_entered);
     }
 
-    fn asteroid_physics_process(&mut self, delta: f64) {
-        if self.main.is_in_group("main_scene") && self.main.bind().is_paused {
-            return;
+    fn asteroid_physics_process(&mut self, _delta: f64) {
+        if self.main.is_in_group("main_scene") {
+            let main = self.main.clone().cast::<main_scene::Main>();
+            if main.bind().is_paused {
+                return;
+            }
         }
 
         let position = self.base().get_position();
-
-        // use a scope to limit vert_speed since i dont want it cluttering stuff up
-        // outside of this operation
-        {
-            // we have to do this because since we're using base_mut(), we cant access
-            // self.vertical_speed while doing set_position() cause borrow checker :3
-            let vert_speed = self.vertical_speed;
-            self.base_mut().set_position(Vector2 {
-                x: position.x,
-                y: position.y + vert_speed * delta as f32,
-            });
-        }
 
         if position.x > 250.0 || position.x < -50.0 {
             self.base_mut().queue_free();

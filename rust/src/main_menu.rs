@@ -1,7 +1,8 @@
 // NOTE: done with this file
 
 use godot::classes::{
-    AnimationPlayer, Area2D, Button, Control, IControl, Input, Label, Os, ResourceLoader,
+    AnimationPlayer, Area2D, Button, CanvasItem, Control, IControl, Input, Label, Os,
+    ResourceLoader, Timer,
 };
 use godot::global::randi_range;
 use godot::prelude::*;
@@ -18,7 +19,7 @@ pub struct MainMenu {
     base: Base<Control>,
 
     #[init(val = OnReady::manual())]
-    scene_root_node: OnReady<Gd<Control>>,
+    scene_root_node: OnReady<Gd<CanvasItem>>,
 
     #[init(node = "UI")]
     ui_animation: OnReady<Gd<AnimationPlayer>>,
@@ -55,6 +56,9 @@ pub struct MainMenu {
 
     #[init(node = "YesQuit")]
     yes_quit: OnReady<Gd<Button>>,
+
+    #[init(node = "AsteroidTimer")]
+    asteroid_timer: OnReady<Gd<Timer>>,
 
     #[allow(dead_code)] // this is literally used????
     #[init(val = ResourceLoader::singleton().load("res://scenes/main.tscn").unwrap().cast::<PackedScene>())]
@@ -109,10 +113,56 @@ impl IControl for MainMenu {
             .unwrap()
             .get_current_scene()
             .unwrap()
-            .cast::<Control>();
+            .cast::<CanvasItem>();
         self.scene_root_node.init(current_scene);
 
         self.MusicManager.bind_mut().title_theme.call("play", &[]);
+
+        // signal stuff
+        self.asteroid_timer
+            .signals()
+            .timeout()
+            .connect_other(self, Self::_on_asteroid_timer_timeout);
+
+        self.play_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_play_pressed);
+
+        self.settings_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_settings_pressed);
+
+        self.quit_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_quit_pressed);
+
+        self.are_you_sure
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_are_you_sure_pressed);
+
+        self.no_quit
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_no_quit_pressed);
+
+        self.yes_quit
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_yes_quit_pressed);
+
+        self.tutorial_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_tutorial_pressed);
+
+        self.credits_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_credits_pressed);
     }
 
     fn process(&mut self, _delta: f64) {
@@ -184,24 +234,25 @@ impl MainMenu {
     // NOTE: i coded the following 3 functions for the original project but i guess i never used
     // them??? so i guess ill just translate them and never use them here too.
 
-    #[allow(dead_code)]
-    fn start_animations(&mut self) {
+    #[func]
+    pub fn start_animations(&mut self) {
         self.ui_animation.play_ex().name("ascend_title").done();
         if !self.play_button.is_visible() {
             self.ui_animation.queue("pop_in_buttons");
         }
     }
 
-    #[allow(dead_code)]
-    fn start_title_idle(&mut self) {
+    #[func]
+    pub fn start_title_idle(&mut self) {
         self.title_idle_animation.play_ex().name("idle").done();
     }
 
-    #[allow(dead_code)]
-    fn start_button_idle(&mut self) {
+    #[func]
+    pub fn start_button_idle(&mut self) {
         self.button_animation.play_ex().name("idle").done();
     }
 
+    #[func]
     fn _on_asteroid_timer_timeout(&mut self) {
         let mut asteroids_node = self.base_mut().get_node_as::<Node>("Asteroids");
         let asteroid_packed_scene = self
@@ -215,6 +266,7 @@ impl MainMenu {
         asteroids_node.add_child(&asteroid_packed_scene);
     }
 
+    #[func]
     fn _on_play_pressed(&mut self) {
         self.MusicManager.bind_mut().title_theme.call("stop", &[]);
         self.SFXManager.bind_mut().click.call("play", &[]);
@@ -223,6 +275,7 @@ impl MainMenu {
         scene_tree.change_scene_to_packed(game_scene);
     }
 
+    #[func]
     fn _on_settings_pressed(&mut self) {
         self.SFXManager.bind_mut().click.call("play", &[]);
 
@@ -243,6 +296,7 @@ impl MainMenu {
             );
     }
 
+    #[func]
     fn _on_quit_pressed(&mut self) {
         self.SFXManager.bind_mut().click.call("play", &[]);
         self.title.set_visible(false);
@@ -265,12 +319,14 @@ impl MainMenu {
         self.no_quit.set_disabled(false);
     }
 
+    #[func]
     fn _on_are_you_sure_pressed(&mut self) {
         self.SFXManager.bind_mut().click.call("play", &[]);
         let mut os = Os::singleton();
         os.shell_open("https://i.ytimg.com/vi/YSWMYnuOImg/hqdefault.jpg");
     }
 
+    #[func]
     fn _on_no_quit_pressed(&mut self) {
         self.SFXManager.bind_mut().click.call("play", &[]);
         self.are_you_sure.set_visible(false);
@@ -293,11 +349,13 @@ impl MainMenu {
         self.credits_button.set_disabled(false);
     }
 
+    #[func]
     fn _on_yes_quit_pressed(&mut self) {
         self.SFXManager.bind_mut().click.call("play", &[]);
         self.base_mut().get_tree().unwrap().quit();
     }
 
+    #[func]
     fn _on_tutorial_pressed(&mut self) {
         self.SFXManager.bind_mut().click.call("play", &[]);
 
@@ -317,6 +375,7 @@ impl MainMenu {
             );
     }
 
+    #[func]
     fn _on_credits_pressed(&mut self) {
         self.SFXManager.bind_mut().click.call("play", &[]);
 
@@ -328,11 +387,15 @@ impl MainMenu {
             .get_root()
             .unwrap()
             .add_child(&self.credits_scene.instantiate().unwrap().cast::<Credits>());
-        // get_tree().get_root().add_child(credits_scene.instantiate())
     }
 
-    #[allow(dead_code)]
-    fn disappear_node(&mut self, mut node: Gd<Control>) {
+    // NOTE: since #[func] makes simple functions aware to godot and gdscript, generics are not
+    // supported
+    //
+    // #[func]
+    #[allow(unused_mut)]
+    fn disappear_node<T: Inherits<CanvasItem>>(&self, mut node: Gd<T>) {
+        let mut node = node.upcast::<CanvasItem>();
         node.set_visible(false);
 
         let buttons = self.base().get_tree().unwrap().get_nodes_in_group("button");
@@ -343,7 +406,9 @@ impl MainMenu {
     }
 
     #[allow(dead_code)]
-    fn appear_node(&self, mut node: Gd<Control>) {
+    #[allow(unused_mut)]
+    fn appear_node<T: Inherits<CanvasItem>>(&self, mut node: Gd<T>) {
+        let mut node = node.upcast::<CanvasItem>();
         node.set_visible(true);
 
         let buttons = self.base().get_tree().unwrap().get_nodes_in_group("button");

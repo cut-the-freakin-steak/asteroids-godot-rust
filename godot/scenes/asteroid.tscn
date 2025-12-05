@@ -11,5 +11,3 @@ position = Vector2(-1, 0)
 
 [node name="ExplosionToQueueFree" type="Timer" parent="."]
 wait_time = 0.5
-
-[connection signal="timeout" from="ExplosionToQueueFree" to="." method="_on_explosion_to_queue_free_timeout"]
