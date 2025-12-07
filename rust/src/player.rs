@@ -257,7 +257,7 @@ impl ICharacterBody2D for Player {
                 movement_vector.y = -1.0;
             }
 
-            let velocity = self.base().get_velocity();
+            let mut velocity = self.base().get_velocity();
             let rotation = self.base().get_rotation();
             let acceleration = self.acceleration;
             if movement_vector.y == 1.0 {
@@ -282,6 +282,8 @@ impl ICharacterBody2D for Player {
             }
 
             let max_speed = self.max_speed;
+            // NOTE: overwrite old velocity value with new, changed velocity value
+            velocity = self.base().get_velocity();
             self.base_mut()
                 .set_velocity(velocity.limit_length(Some(max_speed)));
 
@@ -290,37 +292,16 @@ impl ICharacterBody2D for Player {
                 .rotate(rotation_speed * rotation_direction * delta as f32);
 
             // i-frame flashing
-            if self.i_frame_timer.get_time_left() > 0.5 {
-                self.millisecond_even_or_odd = self
-                    .i_frame_timer
-                    .get_time_left()
-                    .to_string()
-                    .to_godot()
-                    .split(".")[1]
-                    .to_int() as i32
-                    % 3;
-                if self.millisecond_even_or_odd == 0 {
-                    self.sprite.set_visible(false);
-                }
-                else {
-                    self.sprite.set_visible(true);
-                }
+            let time_left = self.i_frame_timer.get_time_left();
+            if time_left > 0.5 {
+                self.millisecond_even_or_odd = ((time_left * 10.0) as i32) % 3;
+
+                self.sprite.set_visible(self.millisecond_even_or_odd != 0);
             }
-            else if self.i_frame_timer.get_time_left() > 0.0 {
-                self.millisecond_even_or_odd = self
-                    .i_frame_timer
-                    .get_time_left()
-                    .to_string()
-                    .to_godot()
-                    .split(".")[1]
-                    .to_int() as i32
-                    % 2;
-                if self.millisecond_even_or_odd == 0 {
-                    self.sprite.set_visible(false);
-                }
-                else {
-                    self.sprite.set_visible(true);
-                }
+            else if time_left > 0.0 {
+                self.millisecond_even_or_odd = ((time_left * 10.0) as i32) % 2;
+
+                self.sprite.set_visible(self.millisecond_even_or_odd != 0);
             }
         }
 
@@ -460,7 +441,8 @@ impl Player {
     // signal connection
     #[func]
     fn _on_damage_taken(&mut self) {
-        if !self.can_be_damaged {
+        godot_print!("boing");
+        if !self.can_be_damaged || !self.alive {
             return;
         }
 
@@ -506,7 +488,7 @@ impl Player {
                         .name("lose_health_3")
                         .done();
                 }
-                _ => godot_error!("uhhhhh damn, youre not supposed to be able to do this lmao"),
+                _ => {} // nothing should happen
             }
         }
         if self.hp > 0 {
@@ -533,12 +515,15 @@ impl Player {
             }
 
             self.alive = false;
+            self.can_be_damaged = false;
         }
     }
 
     #[func]
     fn _on_i_frame_timer_timeout(&mut self) {
         self.sprite.set_visible(true);
-        self.can_be_damaged = true
+        if self.alive {
+            self.can_be_damaged = true
+        }
     }
 }

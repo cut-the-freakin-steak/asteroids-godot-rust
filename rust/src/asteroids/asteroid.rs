@@ -99,10 +99,6 @@ impl AsteroidIFunctions for Asteroid {
         else {
             self.vertical_speed = randi_range(35, 45) as f32 * self.direction.y;
         }
-        self.base()
-            .signals()
-            .body_entered()
-            .connect_other(self, Self::_on_body_entered);
     }
 
     fn asteroid_physics_process(&mut self, _delta: f64) {
@@ -137,22 +133,7 @@ impl IArea2D for Asteroid {
 }
 
 #[godot_api]
-impl Asteroid {
-    // signal connection
-    #[func]
-    pub fn _on_body_entered(&mut self, body: Gd<Node2D>) {
-        if body.is_in_group("player") {
-            // FIX: figure out a way to make ts type safe
-            // NOTE: ^ figured it out :3
-            // something very interesting about this is that it's actually
-            // *safer* than gdscript, since signals are typed in godot-rust
-
-            // invalid state irrepresentable here, so a simple cast is just fine
-            let real_body = body.cast::<player::Player>();
-            real_body.signals().damage_taken().emit();
-        }
-    }
-}
+impl Asteroid {}
 
 #[derive(PartialEq, GodotConvert, Debug, Clone)]
 #[godot(via = i32)]

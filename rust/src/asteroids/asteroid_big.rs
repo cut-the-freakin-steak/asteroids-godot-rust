@@ -5,6 +5,7 @@ use godot::global::{randi, randi_range};
 use godot::prelude::*;
 
 use crate::main_scene::Main;
+use crate::player;
 use crate::{
     asteroids::asteroid::{Asteroid, AsteroidSize},
     camera_manager::CameraManager,
@@ -69,6 +70,11 @@ impl IArea2D for BigAsteroid {
             self.camera_manager
                 .init(ast_bind.main.get_node_as::<CameraManager>("CameraManager"));
         }
+
+        self.base()
+            .signals()
+            .body_entered()
+            .connect_other(self, Self::_on_body_entered);
     }
 
     fn physics_process(&mut self, delta: f64) {
@@ -108,7 +114,7 @@ impl BigAsteroid {
         main.bind_mut().score += 1;
         main.emit_signal(
             "asteroid_hit",
-            &["big".to_variant(), global_position.to_variant()],
+            &[AsteroidSize::Big.to_variant(), global_position.to_variant()],
         );
         ast_bind.explosion_parts.set_emitting(true);
         ast_bind.sprite.set_visible(false);
@@ -124,6 +130,21 @@ impl BigAsteroid {
         explosion_sfx.call("play", &[]);
 
         self.camera_manager.bind_mut().screen_shake(2.5, 0.3);
+    }
+
+    // signal connection
+    #[func]
+    pub fn _on_body_entered(&mut self, body: Gd<Node2D>) {
+        if body.is_in_group("player") {
+            // FIX: figure out a way to make ts type safe
+            // NOTE: ^ figured it out :3
+            // something very interesting about this is that it's actually
+            // *safer* than gdscript, since signals are typed in godot-rust
+
+            // invalid state irrepresentable here, so a simple cast is just fine
+            let real_body = body.cast::<player::Player>();
+            real_body.signals().damage_taken().emit();
+        }
     }
 
     // signal connection
