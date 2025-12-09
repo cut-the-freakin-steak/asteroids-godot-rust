@@ -100,6 +100,14 @@ impl IArea2D for MediumAsteroid {
     }
 
     fn physics_process(&mut self, delta: f64) {
+        if self.main.get_name() == "Main".into() {
+            let main = self.main.clone().cast::<Main>();
+
+            if main.bind().is_paused {
+                return;
+            }
+        }
+
         AsteroidIFunctions::asteroid_physics_process(self, delta);
         {
             if !self.ast_base.is_instance_valid() {

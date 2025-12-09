@@ -33,13 +33,13 @@ pub struct SettingsClass {
     pub hurricane_mode: bool,
 
     #[init(val = 1.0)]
-    pub master_volume: f32,
+    pub master_volume: f64,
 
     #[init(val = 1.0)]
-    pub music_volume: f32,
+    pub music_volume: f64,
 
     #[init(val = 1.0)]
-    pub sfx_volume: f32,
+    pub sfx_volume: f64,
 }
 
 #[godot_api]
@@ -158,19 +158,19 @@ impl SettingsClass {
         self.master_volume = settings_dict
             .get("master_volume")
             .unwrap()
-            .try_to::<f32>()
+            .try_to::<f64>()
             .unwrap();
 
         self.music_volume = settings_dict
             .get("music_volume")
             .unwrap()
-            .try_to::<f32>()
+            .try_to::<f64>()
             .unwrap();
 
         self.sfx_volume = settings_dict
             .get("sfx_volume")
             .unwrap()
-            .try_to::<f32>()
+            .try_to::<f64>()
             .unwrap();
 
         // any settings not seen here handle their behaviour based on a variable or function that isn't the direct variable that we set above

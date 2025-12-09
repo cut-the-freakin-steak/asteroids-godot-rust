@@ -113,21 +113,12 @@ impl IControl for SettingsScene {
                 .cast::<CanvasItem>(),
         );
 
-        let main_menu_node_init = self.base().try_get_node_as::<MainMenu>("root/MainMenu");
+        let main_menu_node_init = self.base().try_get_node_as::<MainMenu>("/root/MainMenu");
 
         self.main_menu_node_opt.init(main_menu_node_init);
 
         let game_scene_node_init = self.base().try_get_node_as::<Main>("/root/Main");
         self.game_scene_node_opt.init(game_scene_node_init);
-
-        let current_scene = self
-            .base()
-            .get_tree()
-            .unwrap()
-            .get_current_scene()
-            .unwrap()
-            .cast::<CanvasItem>();
-        self.scene_root_node.init(current_scene);
 
         use display_server as ds;
         if self.Settings.bind().vsync_on {
@@ -156,26 +147,55 @@ impl IControl for SettingsScene {
         self.master_bus
             .set("volume", &self.Settings.bind().master_volume.to_variant());
         self.master_volume_slider
-            .set_value(self.Settings.bind().master_volume as f64);
+            .set_value(self.Settings.bind().master_volume);
 
         self.music_bus
             .set("volume", &self.Settings.bind().music_volume.to_variant());
         self.music_volume_slider
-            .set_value(self.Settings.bind().music_volume as f64);
+            .set_value(self.Settings.bind().music_volume);
 
         self.sfx_bus
             .set("volume", &self.Settings.bind().sfx_volume.to_variant());
         self.sfx_volume_slider
-            .set_value(self.Settings.bind().sfx_volume as f64);
+            .set_value(self.Settings.bind().sfx_volume);
 
+        // TODO: this
+        //
         // signal connections:
-        // _on_return_pressed
-        // _on_v_sync_toggle_toggled
-        // _on_screen_shake_toggle_toggled
-        // _on_hurricane_mode_toggle_toggled
-        // _on_master_slider_value_changed
-        // _on_music_slider_value_changed
-        // _on_sfx_slider_value_changed
+        self.return_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_return_pressed);
+
+        self.vsync_toggle
+            .signals()
+            .toggled()
+            .connect_other(self, Self::_on_v_sync_toggle_toggled);
+
+        self.screen_shake_toggle
+            .signals()
+            .toggled()
+            .connect_other(self, Self::_on_screen_shake_toggle_toggled);
+
+        self.hurricane_mode_toggle
+            .signals()
+            .toggled()
+            .connect_other(self, Self::_on_hurricane_mode_toggle_toggled);
+
+        self.master_volume_slider
+            .signals()
+            .value_changed()
+            .connect_other(self, Self::_on_master_slider_value_changed);
+
+        self.music_volume_slider
+            .signals()
+            .value_changed()
+            .connect_other(self, Self::_on_music_slider_value_changed);
+
+        self.sfx_volume_slider
+            .signals()
+            .value_changed()
+            .connect_other(self, Self::_on_sfx_slider_value_changed);
     }
 }
 
@@ -192,6 +212,7 @@ impl SettingsScene {
 
         if let Some(mut game_scene_node) = self.game_scene_node_opt.clone() {
             // appear_root_node() wouldnt work here because it doesnt have the following 4 lines of code
+            self.appear_node(game_scene_node.clone().upcast::<CanvasItem>());
             game_scene_node.bind_mut().pause_label.set_visible(true);
             game_scene_node.bind_mut().resume_button.set_visible(true);
             game_scene_node
@@ -283,21 +304,21 @@ impl SettingsScene {
 
     // NOTE: audio signals
     #[func]
-    fn _on_master_slider_value_changed(&mut self, value: f32) {
+    fn _on_master_slider_value_changed(&mut self, value: f64) {
         self.Settings.bind_mut().master_volume = value;
         self.master_bus
             .set("volume", &self.Settings.bind().master_volume.to_variant());
     }
 
     #[func]
-    fn _on_music_slider_value_changed(&mut self, value: f32) {
+    fn _on_music_slider_value_changed(&mut self, value: f64) {
         self.Settings.bind_mut().music_volume = value;
         self.music_bus
             .set("volume", &self.Settings.bind().music_volume.to_variant());
     }
 
     #[func]
-    fn _on_sfx_slider_value_changed(&mut self, value: f32) {
+    fn _on_sfx_slider_value_changed(&mut self, value: f64) {
         self.Settings.bind_mut().sfx_volume = value;
         self.sfx_bus
             .set("volume", &self.Settings.bind().sfx_volume.to_variant());

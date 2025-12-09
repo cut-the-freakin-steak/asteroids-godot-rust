@@ -5,6 +5,7 @@ use godot::global::{deg_to_rad, randf_range, randomize, snappedf};
 use godot::prelude::*;
 
 use crate::audio::sfx_manager;
+use crate::main_scene::Main;
 
 #[derive(GodotClass)]
 #[class(init, base = CharacterBody2D)]
@@ -12,7 +13,7 @@ struct Bullet {
     base: Base<CharacterBody2D>,
 
     #[init(val = OnReady::manual())]
-    main: OnReady<Gd<Node2D>>,
+    main: OnReady<Gd<Main>>,
 
     #[init(val = OnReady::manual())]
     player: OnReady<Gd<CharacterBody2D>>,
@@ -41,7 +42,7 @@ impl ICharacterBody2D for Bullet {
                 .unwrap()
                 .get_current_scene()
                 .unwrap()
-                .cast::<Node2D>();
+                .cast::<Main>();
             self.main.init(current_scene);
 
             let player_node = self
@@ -72,6 +73,10 @@ impl ICharacterBody2D for Bullet {
     }
 
     fn physics_process(&mut self, _delta: f64) {
+        if self.main.bind().is_paused {
+            return;
+        }
+
         let mut velocity = self.base().get_velocity();
         let rotation = self.base().get_rotation();
         let acceleration = self.acceleration;

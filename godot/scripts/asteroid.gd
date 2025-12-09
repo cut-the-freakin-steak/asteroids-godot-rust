@@ -51,8 +51,6 @@ func _ready() -> void:
 		vertical_speed = randi_range(35, 45) * direction.y
 
 	body_entered.connect(_on_body_entered)
-	
-	
 
 
 func _physics_process(delta: float) -> void:
