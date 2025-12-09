@@ -420,8 +420,8 @@ impl Main {
                 // asteroids_node.call_deferred("add_child", &[new_ast2.to_variant()]);
                 asteroids_node.add_child(&new_ast1);
                 asteroids_node.add_child(&new_ast2);
-                new_ast1.bind_mut().ast_base.bind_mut().use_set_position = true;
-                new_ast2.bind_mut().ast_base.bind_mut().use_set_position = true;
+                new_ast1.bind_mut().use_set_position = true;
+                new_ast2.bind_mut().use_set_position = true;
                 new_ast1.set_global_position(ast_position);
                 new_ast2.set_global_position(ast_position);
             }
@@ -440,8 +440,8 @@ impl Main {
                 // asteroids_node.call_deferred("add_child", &[new_ast2.to_variant()]);
                 asteroids_node.add_child(&new_ast1);
                 asteroids_node.add_child(&new_ast2);
-                new_ast1.bind_mut().ast_base.bind_mut().use_set_position = true;
-                new_ast2.bind_mut().ast_base.bind_mut().use_set_position = true;
+                new_ast1.bind_mut().use_set_position = true;
+                new_ast2.bind_mut().use_set_position = true;
                 new_ast1.set_global_position(ast_position);
                 new_ast2.set_global_position(ast_position);
             }

@@ -1,10 +1,13 @@
 // NOTE: done with this file
 
-use godot::classes::{Area2D, IArea2D, Marker2D};
+use godot::classes::{
+    Area2D, CollisionPolygon2D, GpuParticles2D, IArea2D, Marker2D, Sprite2D, Timer,
+};
 use godot::global::{randi, randi_range};
 use godot::prelude::*;
 
-use crate::asteroids::asteroid::{Asteroid, AsteroidSize};
+use crate::asteroids::asteroid::{Asteroid, AsteroidIFunctions, AsteroidSize};
+use crate::audio::sfx_manager;
 use crate::main_scene::Main;
 use crate::player;
 
@@ -13,35 +16,61 @@ use crate::player;
 pub struct SmallAsteroid {
     base: Base<Area2D>,
 
+    // NOTE: new stuff
+    #[init(val = OnReady::manual())]
+    pub main: OnReady<Gd<Node>>,
+
+    #[init(val = Vector2::ZERO)]
+    pub direction: Vector2,
+
+    #[init(val = 0.0)]
+    pub vertical_speed: f32,
+
+    #[init(val = 0)]
+    pub rotation_speed: i32,
+
+    #[init(val = 0.0)]
+    pub horizontal_speed: f32,
+
+    #[init(val = false)]
+    pub use_set_position: bool,
+
+    #[init(node = "ExplosionToQueueFree")]
+    pub explosion_to_queue_free: OnReady<Gd<Timer>>,
+
+    #[init(node = "Sprite2D")]
+    pub sprite: OnReady<Gd<Sprite2D>>,
+
+    #[init(node = "CollisionPolygon2D")]
+    pub collision: OnReady<Gd<CollisionPolygon2D>>,
+
+    #[init(node = "AsteroidExplosion")]
+    pub explosion_parts: OnReady<Gd<GpuParticles2D>>,
+    // NOTE: end of new stuff
     #[init(node = "Asteroid")]
     pub ast_base: OnReady<Gd<Asteroid>>,
 
     #[allow(dead_code)]
     #[init(val = AsteroidSize::Small)]
     asteroid_size: AsteroidSize,
+
+    // singletons
+    #[allow(non_snake_case)]
+    #[init(node = "/root/SFXManager")]
+    pub SFXManager: OnReady<Gd<sfx_manager::SFXManagerClass>>,
 }
 
 #[godot_api]
 impl IArea2D for SmallAsteroid {
     fn ready(&mut self) {
-        {
-            let mut ast_bind = self.ast_base.bind_mut();
-            // ast_bind.asteroid_ready(); // super()
+        // NOTE: getting the scene tree and then current scene is a bit more
+        // complicated in rust than in gdscript lmao
+        let main_scene = self.base().get_tree().unwrap().get_current_scene().unwrap();
 
-            ast_bind.rotation_speed = randi_range(4, 5) as i32;
-            ast_bind.horizontal_speed = randi_range(40, 55) as f32 * ast_bind.direction.x;
-        }
-        self.ast_base
-            .bind()
-            .explosion_to_queue_free
-            .signals()
-            .timeout()
-            .connect_other(self, Self::on_explosion_to_queue_free_timeout);
+        self.main.init(main_scene);
 
-        if !self.ast_base.bind().use_set_position {
+        if !self.use_set_position {
             let asteroid_markers = self
-                .ast_base
-                .bind()
                 .main
                 .get_node_as::<Node>("AsteroidMarkers")
                 .get_children();
@@ -55,6 +84,14 @@ impl IArea2D for SmallAsteroid {
                 .set_position(selected_asteroid_spawn.get_position());
         }
 
+        AsteroidIFunctions::asteroid_ready(self);
+
+        self.rotation_speed = randi_range(4, 5) as i32;
+        self.horizontal_speed = randi_range(40, 55) as f32 * self.direction.x;
+        self.explosion_to_queue_free
+            .signals()
+            .timeout()
+            .connect_other(self, Self::on_explosion_to_queue_free_timeout);
         self.base()
             .signals()
             .body_entered()
@@ -62,24 +99,21 @@ impl IArea2D for SmallAsteroid {
     }
 
     fn physics_process(&mut self, delta: f64) {
-        {
-            if !self.ast_base.is_instance_valid() {
-                godot_warn!("ast_base was freed, removing self");
-                self.base_mut().queue_free();
-                return;
-            }
-            // let mut ast_base_bind = self.ast_base.bind_mut();
-            // ast_base_bind.asteroid_physics_process(delta); // super
+        AsteroidIFunctions::asteroid_physics_process(self, delta);
+        if !self.ast_base.is_instance_valid() {
+            godot_warn!("ast_base was freed, removing self");
+            self.base_mut().queue_free();
+            return;
         }
         {
             let rotation = self.base().get_rotation();
-            let rotation_speed = self.ast_base.bind().rotation_speed;
+            let rotation_speed = self.rotation_speed;
             self.base_mut()
                 .set_rotation(rotation + rotation_speed as f32 * delta as f32);
 
             let position = self.base().get_position();
-            let horizontal_speed = self.ast_base.bind().horizontal_speed;
-            let vertical_speed = self.ast_base.bind().vertical_speed;
+            let horizontal_speed = self.horizontal_speed;
+            let vertical_speed = self.vertical_speed;
             self.base_mut().set_position(Vector2 {
                 x: position.x + horizontal_speed * delta as f32,
                 y: position.y + vertical_speed * delta as f32,
@@ -92,16 +126,15 @@ impl IArea2D for SmallAsteroid {
 impl SmallAsteroid {
     #[func]
     fn split_in_two(&mut self) {
-        let mut ast_bind = self.ast_base.bind_mut();
-        let mut main = ast_bind.main.clone().cast::<Main>();
+        let mut main = self.main.clone().cast::<Main>();
         main.bind_mut().score += 3;
-        ast_bind.explosion_parts.set_emitting(true);
-        ast_bind.sprite.set_visible(false);
-        ast_bind.collision.set_disabled(true);
-        ast_bind.explosion_to_queue_free.start();
+        self.explosion_parts.set_emitting(true);
+        self.sprite.set_visible(false);
+        self.collision.set_disabled(true);
+        self.explosion_to_queue_free.start();
 
         // it took me way too much time to learn about Object::call
-        let explosion_sfx = &mut ast_bind.SFXManager.bind_mut().explosion;
+        let explosion_sfx = &mut self.SFXManager.bind_mut().explosion;
         explosion_sfx.call(
             "set_parameter",
             &["WhichSound".to_variant(), "SmallMed".to_variant()],
