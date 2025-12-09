@@ -66,8 +66,10 @@ impl IArea2D for BigAsteroid {
         // big asteroid shakes camera, so we need to have the camera manager node in main
         let ast_bind = self.ast_base.bind();
 
-        self.camera_manager
-            .init(ast_bind.main.get_node_as::<CameraManager>("CameraManager"));
+        if ast_bind.main.get_name() == "Main".into() {
+            self.camera_manager
+                .init(ast_bind.main.get_node_as::<CameraManager>("CameraManager"));
+        }
 
         self.base()
             .signals()

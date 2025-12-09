@@ -4,6 +4,8 @@ use godot::classes::{FastNoiseLite, INode, Node, Node2D};
 use godot::global::{maxf, randi, randomize};
 use godot::prelude::*;
 
+use crate::global_settings::SettingsClass;
+
 #[derive(GodotClass)]
 #[class(init, base = Node)]
 pub struct CameraManager {
@@ -14,7 +16,7 @@ pub struct CameraManager {
 
     #[allow(non_snake_case)]
     #[init(node = "/root/Settings")]
-    Settings: OnReady<Gd<Node>>,
+    Settings: OnReady<Gd<SettingsClass>>,
 
     #[init(val = 0.0)]
     shake_intensity: f32,
@@ -68,7 +70,7 @@ impl INode for CameraManager {
 impl CameraManager {
     #[func]
     pub fn screen_shake(&mut self, intensity: f32, time: f32) {
-        let screen_shake_setting = self.Settings.get("screen_shake_on").to::<bool>();
+        let screen_shake_setting = self.Settings.bind().screen_shake_on;
 
         if screen_shake_setting {
             randomize();

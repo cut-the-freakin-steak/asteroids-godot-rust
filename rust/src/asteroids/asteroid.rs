@@ -1,12 +1,10 @@
 // NOTE: done with this file
 
-use godot::classes::{
-    Area2D, CollisionPolygon2D, GpuParticles2D, IArea2D, Node, Node2D, Sprite2D, Timer,
-};
+use godot::classes::{Area2D, CollisionPolygon2D, GpuParticles2D, IArea2D, Node, Sprite2D, Timer};
 use godot::global::{randi, randi_range, randomize};
 use godot::prelude::*;
 
-use crate::{audio::sfx_manager, main_scene, player};
+use crate::{audio::sfx_manager, main_scene};
 
 #[derive(GodotClass)]
 #[class(init, base = Area2D)]
