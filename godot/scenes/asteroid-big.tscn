@@ -48,8 +48,6 @@ alpha_curve = SubResource("CurveTexture_vcop2")
 
 [node name="BigAsteroid" type="BigAsteroid" groups=["asteroid"]]
 
-[node name="Asteroid" type="Asteroid" parent="."]
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_px3sp")
 

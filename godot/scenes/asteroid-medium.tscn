@@ -48,8 +48,6 @@ alpha_curve = SubResource("CurveTexture_iii60")
 
 [node name="MediumAsteroid" type="MediumAsteroid" groups=["asteroid"]]
 
-[node name="Asteroid" type="Asteroid" parent="."]
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_mdb8w")
 

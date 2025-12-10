@@ -74,6 +74,9 @@ pub struct Main {
     #[init(node = "AsteroidTimer")]
     asteroid_timer: OnReady<Gd<Timer>>,
 
+    #[init(node = "UI/HighScore")]
+    high_score_label: OnReady<Gd<Label>>,
+
     // scenes
     #[init(val = OnReady::manual())]
     main_menu_scene: OnReady<Gd<PackedScene>>,
@@ -111,6 +114,9 @@ pub struct Main {
 
     #[init(val = 0)]
     pub score: i64,
+
+    #[init(val = OnReady::manual())]
+    high_score: OnReady<i64>,
 
     // singletons
     #[allow(non_snake_case)]
@@ -195,6 +201,7 @@ impl INode2D for Main {
             );
 
             self.score = 0;
+            self.high_score.init(self.Settings.bind().high_score);
             self.is_game_over = false;
             self.game_over_anim_skipped = false;
         }
@@ -457,6 +464,12 @@ impl Main {
     // signal connection
     #[func]
     pub fn _on_game_over(&mut self) {
+        if self.score > *self.high_score {
+            *self.high_score = self.score;
+            self.Settings.bind_mut().high_score = *self.high_score;
+            self.Settings.bind_mut().save_settings();
+        }
+
         self.is_game_over = true;
         self.game_over_text.set_visible(true);
         self.ui_animation

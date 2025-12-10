@@ -40,6 +40,9 @@ pub struct SettingsClass {
 
     #[init(val = 1.0)]
     pub sfx_volume: f64,
+
+    #[init(val = 0)]
+    pub high_score: i64,
 }
 
 #[godot_api]
@@ -86,7 +89,8 @@ impl SettingsClass {
             "hurricane_mode": self.hurricane_mode,
             "master_volume": self.master_volume,
             "music_volume": self.music_volume,
-            "sfx_volume": self.sfx_volume
+            "sfx_volume": self.sfx_volume,
+            "high_score": self.high_score,
         };
 
         let json_string = Json::stringify(&settings_dict.to_variant());
@@ -107,6 +111,7 @@ impl SettingsClass {
 
     pub fn load_settings(&mut self) {
         if !FileAccess::file_exists(&self.settings_save_path) {
+            self.save_settings();
             return;
         }
 
@@ -172,6 +177,14 @@ impl SettingsClass {
             .unwrap()
             .try_to::<f64>()
             .unwrap();
+
+        // NOTE: this is bullshit, you have to always take it out as a float and then cast it to an
+        // int
+        self.high_score = settings_dict
+            .get("high_score")
+            .unwrap()
+            .try_to::<f64>()
+            .unwrap() as i64;
 
         // any settings not seen here handle their behaviour based on a variable or function that isn't the direct variable that we set above
         match self.vsync_on {
