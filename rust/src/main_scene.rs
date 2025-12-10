@@ -239,6 +239,11 @@ impl INode2D for Main {
             .signals()
             .pressed()
             .connect_other(self, Self::_on_main_menu_pressed);
+
+        self.pause_main_menu_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_main_menu_pressed);
     }
 
     fn process(&mut self, _delta: f64) {

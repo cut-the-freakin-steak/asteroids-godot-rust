@@ -1,56 +1,12 @@
 // NOTE: done with this file
 
-use godot::classes::{Area2D, CollisionPolygon2D, GpuParticles2D, IArea2D, Node, Sprite2D, Timer};
 use godot::global::{randi, randi_range, randomize};
 use godot::prelude::*;
 
 use crate::asteroids::{
     asteroid_big::BigAsteroid, asteroid_medium::MediumAsteroid, asteroid_small::SmallAsteroid,
 };
-use crate::{audio::sfx_manager, main_scene};
-
-#[derive(GodotClass)]
-#[class(init, base = Area2D)]
-pub struct Asteroid {
-    // pub base: Base<Area2D>,
-    //
-    // // singletons
-    // #[allow(non_snake_case)]
-    // #[init(node = "/root/SFXManager")]
-    // pub SFXManager: OnReady<Gd<sfx_manager::SFXManagerClass>>,
-    //
-    // // onreadys
-    // #[init(val = OnReady::manual())]
-    // pub main: OnReady<Gd<Node>>,
-    //
-    // #[init(node = "../Sprite2D")]
-    // pub sprite: OnReady<Gd<Sprite2D>>,
-    //
-    // #[init(node = "../CollisionPolygon2D")]
-    // pub collision: OnReady<Gd<CollisionPolygon2D>>,
-    //
-    // #[init(node = "../AsteroidExplosion")]
-    // pub explosion_parts: OnReady<Gd<GpuParticles2D>>,
-    //
-    // #[init(node = "../ExplosionToQueueFree")]
-    // pub explosion_to_queue_free: OnReady<Gd<Timer>>,
-    //
-    // // normal vars
-    // #[init(val = Vector2::ZERO)]
-    // pub direction: Vector2,
-    //
-    // #[init(val = 0.0)]
-    // pub vertical_speed: f32,
-    //
-    // #[init(val = 0.0)]
-    // pub horizontal_speed: f32,
-    //
-    // #[init(val = false)]
-    // pub use_set_position: bool,
-    //
-    // #[init(val = 0)]
-    // pub rotation_speed: i32,
-}
+use crate::main_scene;
 
 pub trait AsteroidIFunctions {
     fn asteroid_ready(&mut self);
@@ -232,20 +188,6 @@ impl AsteroidIFunctions for SmallAsteroid {
         }
     }
 }
-
-#[godot_api]
-impl IArea2D for Asteroid {
-    fn ready(&mut self) {
-        // self.asteroid_ready();
-    }
-
-    fn physics_process(&mut self, delta: f64) {
-        // self.asteroid_physics_process(delta);
-    }
-}
-
-#[godot_api]
-impl Asteroid {}
 
 #[derive(PartialEq, GodotConvert, Debug, Clone)]
 #[godot(via = i32)]

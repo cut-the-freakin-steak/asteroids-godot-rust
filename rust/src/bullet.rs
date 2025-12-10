@@ -1,6 +1,6 @@
 // NOTE: done with this file
 
-use godot::classes::{Area2D, CharacterBody2D, ICharacterBody2D, Node2D};
+use godot::classes::{Area2D, CharacterBody2D, ICharacterBody2D};
 use godot::global::{deg_to_rad, randf_range, randomize, snappedf};
 use godot::prelude::*;
 

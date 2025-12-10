@@ -6,7 +6,7 @@ use godot::classes::{
 use godot::global::{randi, randi_range};
 use godot::prelude::*;
 
-use crate::asteroids::asteroid::{Asteroid, AsteroidIFunctions, AsteroidSize};
+use crate::asteroids::asteroid::{AsteroidIFunctions, AsteroidSize};
 use crate::audio::sfx_manager;
 use crate::main_scene::Main;
 use crate::player;
@@ -47,9 +47,6 @@ pub struct SmallAsteroid {
     #[init(node = "AsteroidExplosion")]
     pub explosion_parts: OnReady<Gd<GpuParticles2D>>,
     // NOTE: end of new stuff
-    #[init(node = "Asteroid")]
-    pub ast_base: OnReady<Gd<Asteroid>>,
-
     #[allow(dead_code)]
     #[init(val = AsteroidSize::Small)]
     asteroid_size: AsteroidSize,
@@ -108,11 +105,7 @@ impl IArea2D for SmallAsteroid {
         }
 
         AsteroidIFunctions::asteroid_physics_process(self, delta);
-        if !self.ast_base.is_instance_valid() {
-            godot_warn!("ast_base was freed, removing self");
-            self.base_mut().queue_free();
-            return;
-        }
+
         {
             let rotation = self.base().get_rotation();
             let rotation_speed = self.rotation_speed;

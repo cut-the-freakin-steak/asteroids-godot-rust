@@ -134,7 +134,7 @@ impl SettingsClass {
             return;
         }
 
-        let settings_dict = json.get_data().try_to::<Dictionary>().unwrap();
+        let settings_dict = json.get_data().try_to::<VarDictionary>().unwrap();
 
         // load each setting and update variable values with a fallback value just in case
         self.vsync_on = settings_dict

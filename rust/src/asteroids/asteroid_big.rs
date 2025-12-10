@@ -9,11 +9,7 @@ use godot::prelude::*;
 use crate::asteroids::asteroid::AsteroidIFunctions;
 use crate::main_scene::Main;
 use crate::player;
-use crate::{
-    asteroids::asteroid::{Asteroid, AsteroidSize},
-    audio::sfx_manager,
-    camera_manager::CameraManager,
-};
+use crate::{asteroids::asteroid::AsteroidSize, audio::sfx_manager, camera_manager::CameraManager};
 
 #[derive(GodotClass)]
 #[class(init, base = Area2D)]
@@ -51,9 +47,6 @@ pub struct BigAsteroid {
     #[init(node = "AsteroidExplosion")]
     pub explosion_parts: OnReady<Gd<GpuParticles2D>>,
     // NOTE: end of new stuff
-    #[init(node = "Asteroid")]
-    pub ast_base: OnReady<Gd<Asteroid>>,
-
     #[init(val = OnReady::manual())]
     camera_manager: OnReady<Gd<CameraManager>>,
 
@@ -125,12 +118,6 @@ impl IArea2D for BigAsteroid {
         }
 
         AsteroidIFunctions::asteroid_physics_process(self, delta);
-
-        if !self.ast_base.is_instance_valid() {
-            godot_warn!("ast_base was freed, removing self");
-            self.base_mut().queue_free();
-            return;
-        }
 
         {
             let rotation = self.base().get_rotation();

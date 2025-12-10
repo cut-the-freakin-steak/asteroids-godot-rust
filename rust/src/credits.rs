@@ -16,6 +16,9 @@ pub struct Credits {
     #[init(node = "/root/MainMenu")]
     main_menu_node: OnReady<Gd<Control>>,
 
+    #[init(node = "Return")]
+    return_button: OnReady<Gd<Button>>,
+
     // singletons
     #[allow(non_snake_case)]
     #[init(node = "/root/SFXManager")]
@@ -33,6 +36,11 @@ impl IControl for Credits {
             .unwrap()
             .cast::<Control>();
         self.scene_root_node.init(current_scene);
+
+        self.return_button
+            .signals()
+            .pressed()
+            .connect_other(self, Self::_on_return_pressed);
     }
 
     fn process(&mut self, _delta: f64) {
