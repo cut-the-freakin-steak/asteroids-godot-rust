@@ -345,11 +345,13 @@ impl INode2D for Main {
             let game_over_text_modulate = self.game_over_text.get_modulate();
             let try_again_button_modulate = self.try_again_button.get_modulate();
             let main_menu_button_modulate = self.main_menu_button.get_modulate();
+            let high_score_label_modulate = self.high_score_label.get_modulate();
 
             self.game_over_anim_skipped = true;
             self.ui_animation.stop();
             self.try_again_button.set_visible(true);
             self.main_menu_button.set_visible(true);
+            self.high_score_label.set_visible(true);
             self.game_over_text.set_modulate(Color {
                 r: game_over_text_modulate.r,
                 g: game_over_text_modulate.g,
@@ -366,6 +368,12 @@ impl INode2D for Main {
                 r: main_menu_button_modulate.r,
                 g: main_menu_button_modulate.g,
                 b: main_menu_button_modulate.b,
+                a: 1.0,
+            });
+            self.high_score_label.set_modulate(Color {
+                r: high_score_label_modulate.r,
+                g: high_score_label_modulate.g,
+                b: high_score_label_modulate.b,
                 a: 1.0,
             });
             self.game_over_label_animation.play_ex().name("idle").done();
@@ -468,6 +476,13 @@ impl Main {
             *self.high_score = self.score;
             self.Settings.bind_mut().high_score = *self.high_score;
             self.Settings.bind_mut().save_settings();
+            self.high_score_label
+                .set_text(&format!("New High Score! {}", *self.high_score).to_godot());
+        }
+        else {
+            *self.high_score = self.Settings.bind().high_score;
+            self.high_score_label
+                .set_text(&format!("High Score: {}", *self.high_score).to_godot());
         }
 
         self.is_game_over = true;
