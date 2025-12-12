@@ -5,7 +5,6 @@ mod audio;
 mod bullet;
 mod camera_manager;
 mod credits;
-mod fmod_bindings;
 mod global_settings;
 mod main_menu;
 mod main_scene;
