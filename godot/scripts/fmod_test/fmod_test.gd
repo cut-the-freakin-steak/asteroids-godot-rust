@@ -3,5 +3,5 @@ extends Node
 var fmod2d = FmodEventEmitter2D.new()
 
 func _ready() -> void:
-	pass
-	# FmodServer.init()
+	FmodServer.set_software_format(
+	FmodSoftwareFormatSettings
