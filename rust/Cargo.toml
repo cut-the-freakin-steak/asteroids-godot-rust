@@ -9,7 +9,7 @@ crate-type = ["cdylib"] # Compile this crate to a dynamic C library.
 
 [dependencies]
 godot = "0.4.5"
-fmod-gdrust-bindings = { path = "./fmod-gdrust-bindings" }
+fmod-gdrust-bindings = { path = "fmod-gdrust-bindings" }
 
 [lints.rust]
 non_snake_case = "allow"
