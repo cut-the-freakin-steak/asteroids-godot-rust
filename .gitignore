@@ -3,5 +3,6 @@
 /godot/android/
 
 /rust/target/
+/rust/fmod-gdrust-bindings/target/
 
 .DS_Store

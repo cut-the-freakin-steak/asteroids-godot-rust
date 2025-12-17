@@ -160,8 +160,6 @@ impl SettingsClass {
             .try_to::<f64>()
             .unwrap_or(1.0);
 
-        // NOTE: this is bullshit, you have to always take it out as a float and then cast it to an
-        // int
         self.high_score = config_file
             .get_value("game", "high_score")
             .try_to::<i64>()

@@ -2,12 +2,14 @@
 name = "gaysteroids"
 version = "0.1.0"
 edition = "2024"
+authors = ["cut_the_freakin_steak"]
 
 [lib]
 crate-type = ["cdylib"] # Compile this crate to a dynamic C library.
 
 [dependencies]
-godot = "0.4.4"
+godot = "0.4.5"
+fmod-gdrust-bindings = { path = "./fmod-gdrust-bindings" }
 
 [lints.rust]
 non_snake_case = "allow"
