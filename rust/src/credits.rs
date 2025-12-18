@@ -82,7 +82,7 @@ impl Credits {
 
     #[func]
     fn _on_return_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
 
         self.appear_node(self.scene_root_node.clone());
 

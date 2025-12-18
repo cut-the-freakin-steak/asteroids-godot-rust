@@ -55,15 +55,11 @@ impl ICharacterBody2D for Bullet {
         self.base_mut()
             .set_rotation_degrees(player_rotation_degs + 90.0);
 
-        // SFXManager.laser_shot.set_parameter("PitchParam", snappedf(randf_range(-0.05, 0.05), 0.01))
-        self.SFXManager.bind_mut().laser_shot.call(
-            "set_parameter",
-            &[
-                "PitchParam".to_variant(),
-                snappedf(randf_range(-0.05, 0.05), 0.01).to_variant(),
-            ],
+        self.SFXManager.bind_mut().laser_shot.set_parameter(
+            "PitchParam",
+            snappedf(randf_range(-0.05, 0.05), 0.01).to_variant(),
         );
-        self.SFXManager.bind_mut().laser_shot.call("play", &[]);
+        self.SFXManager.bind_mut().laser_shot.play(None);
 
         // signal stuff
         self.area_2d

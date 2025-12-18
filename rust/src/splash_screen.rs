@@ -47,7 +47,7 @@ impl IControl for SplashScreen {
     fn ready(&mut self) {
         self.Settings.bind_mut().load_settings();
         self.fade();
-        self.SFXManager.bind_mut().splash_screen.call("play", &[]);
+        self.SFXManager.bind_mut().splash_screen.play(None);
     }
 }
 

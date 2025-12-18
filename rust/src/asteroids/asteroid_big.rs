@@ -154,11 +154,8 @@ impl BigAsteroid {
 
         // it took me way too much time to learn about Object::call
         let explosion_sfx = &mut self.SFXManager.bind_mut().explosion;
-        explosion_sfx.call(
-            "set_parameter",
-            &["WhichSound".to_variant(), "Big".to_variant()],
-        );
-        explosion_sfx.call("play", &[]);
+        explosion_sfx.set_parameter("WhichSound", "Big".to_variant());
+        explosion_sfx.play(None);
 
         self.camera_manager.bind_mut().screen_shake(2.5, 0.3);
     }

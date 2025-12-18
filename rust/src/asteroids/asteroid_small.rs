@@ -136,11 +136,7 @@ impl SmallAsteroid {
 
         // it took me way too much time to learn about Object::call
         let explosion_sfx = &mut self.SFXManager.bind_mut().explosion;
-        explosion_sfx.call(
-            "set_parameter",
-            &["WhichSound".to_variant(), "SmallMed".to_variant()],
-        );
-        explosion_sfx.call("play", &[]);
+        explosion_sfx.set_parameter("WhichSound", "SmallMed".to_variant());
     }
 
     // signal connection

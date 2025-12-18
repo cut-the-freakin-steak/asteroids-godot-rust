@@ -137,50 +137,41 @@ impl ICharacterBody2D for Player {
         let ship_thruster_sfx = &mut self.SFXManager.bind_mut().ship_thruster;
 
         if self.main.bind().is_game_over || input.is_action_pressed("decelerate") {
-            ship_thruster_sfx.call("stop", &[]);
+            ship_thruster_sfx.stop();
         }
         else {
             if input.is_action_just_pressed("up") {
-                ship_thruster_sfx.call(
-                    "set_parameter",
-                    &["ShouldLoop".to_variant(), "Yes".to_variant()],
-                );
+                ship_thruster_sfx.set_parameter("ShouldLoop", "Yes".to_variant());
 
-                ship_thruster_sfx.call("play", &[]);
+                ship_thruster_sfx.play(None);
             }
 
             if input.is_action_pressed("up") {
-                ship_thruster_sfx.call("play", &[false.to_variant()]);
+                ship_thruster_sfx.play(Some(false));
+
                 if ship_thruster_sfx
-                    .call("get_parameter", &["PitchParam".to_variant()])
-                    .try_to::<f32>()
-                    .unwrap()
+                    .get_parameter("PitchParam")
+                    .to::<f32>()
                     .to_godot()
                     < 0.20
                 {
-                    let modified_pitch_param = ship_thruster_sfx
-                        .call("get_parameter", &["PitchParam".to_variant()])
-                        .try_to::<f32>()
-                        .unwrap()
-                        + (0.10 * delta as f32);
-                    ship_thruster_sfx.call(
-                        "set_parameter",
-                        &["PitchParam".to_variant(), modified_pitch_param.to_variant()],
-                    );
+                    let modified_pitch_param =
+                        ship_thruster_sfx.get_parameter("PitchParam").to::<f32>()
+                            + (0.10 * delta as f32);
+
+                    ship_thruster_sfx
+                        .set_parameter("PitchParam", modified_pitch_param.to_variant());
                 }
             }
+
             if !input.is_action_pressed("up")
                 && ship_thruster_sfx
-                    .call("get_parameter", &["ShouldLoop".to_variant()])
-                    .try_to::<GString>()
-                    .unwrap()
+                    .get_parameter("ShouldLoop")
+                    .to::<GString>()
                     == "Yes".to_godot()
             {
-                ship_thruster_sfx.call("stop", &[]);
-                ship_thruster_sfx.call(
-                    "set_parameter",
-                    &["PitchParam".to_variant(), 0.0.to_variant()],
-                );
+                ship_thruster_sfx.stop();
+                ship_thruster_sfx.set_parameter("PitchParam", 0.0.to_variant());
             }
         }
     }
@@ -450,11 +441,8 @@ impl Player {
 
             match self.hp {
                 2 => {
-                    player_hurt_sfx.call(
-                        "set_parameter",
-                        &["HPRemaining".to_variant(), "Alive".to_variant()],
-                    );
-                    player_hurt_sfx.call("play", &[]);
+                    player_hurt_sfx.set_parameter("HPRemaining", "Alive".to_variant());
+                    player_hurt_sfx.play(None);
                     self.main
                         .get_node_as::<AnimationPlayer>("UI/HealthUI/Health")
                         .play_ex()
@@ -462,11 +450,8 @@ impl Player {
                         .done();
                 }
                 1 => {
-                    player_hurt_sfx.call(
-                        "set_parameter",
-                        &["HPRemaining".to_variant(), "Alive".to_variant()],
-                    );
-                    player_hurt_sfx.call("play", &[]);
+                    player_hurt_sfx.set_parameter("HPRemaining", "Alive".to_variant());
+                    player_hurt_sfx.play(None);
                     self.main
                         .get_node_as::<AnimationPlayer>("UI/HealthUI/Health")
                         .play_ex()
@@ -474,11 +459,8 @@ impl Player {
                         .done();
                 }
                 0 => {
-                    player_hurt_sfx.call(
-                        "set_parameter",
-                        &["HPRemaining".to_variant(), "Dead".to_variant()],
-                    );
-                    player_hurt_sfx.call("play", &[]);
+                    player_hurt_sfx.set_parameter("HPRemaining", "Dead".to_variant());
+                    player_hurt_sfx.play(None);
                     self.main
                         .get_node_as::<AnimationPlayer>("UI/HealthUI/Health")
                         .play_ex()

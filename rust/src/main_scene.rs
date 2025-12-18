@@ -178,27 +178,27 @@ impl INode2D for Main {
         }
         {
             if self.Settings.bind().hurricane_mode {
-                self.MusicManager.bind_mut().gameplay.call(
-                    "set_parameter",
-                    &["WhichGameplaySong".to_variant(), "Hurricane".to_variant()],
-                );
+                self.MusicManager
+                    .bind_mut()
+                    .gameplay
+                    .set_parameter("WhichGameplaySong", "Hurricane".to_variant());
             }
             else {
-                self.MusicManager.bind_mut().gameplay.call(
-                    "set_parameter",
-                    &["WhichGameplaySong".to_variant(), "Normal".to_variant()],
-                );
+                self.MusicManager
+                    .bind_mut()
+                    .gameplay
+                    .set_parameter("WhichGameplaySong", "Normal".to_variant());
             }
 
-            self.MusicManager.bind_mut().gameplay.call(
-                "set_parameter",
-                &["MuffledOrNot".to_variant(), 1.0.to_variant()],
-            );
+            self.MusicManager
+                .bind_mut()
+                .gameplay
+                .set_parameter("MuffledOrNot", 1.0.to_variant());
 
-            self.MusicManager.bind_mut().gameplay.call(
-                "set_parameter",
-                &["NormalGameplaySongPitch".to_variant(), 0.0.to_variant()],
-            );
+            self.MusicManager
+                .bind_mut()
+                .gameplay
+                .set_parameter("NormalGameplaySongPitch", 0.0.to_variant());
 
             self.score = 0;
             self.high_score.init(self.Settings.bind().high_score);
@@ -265,10 +265,7 @@ impl INode2D for Main {
                     self.resume_button.set_disabled(false);
                     self.pause_settings_button.set_disabled(false);
                     self.pause_main_menu_button.set_disabled(false);
-                    gameplay_song.call(
-                        "set_parameter",
-                        &["MuffledOrNot".to_variant(), 0.40.to_variant()],
-                    );
+                    gameplay_song.set_parameter("MuffledOrNot", 0.40.to_variant());
                 }
                 else {
                     self.is_paused = false;
@@ -276,47 +273,41 @@ impl INode2D for Main {
                     self.resume_button.set_disabled(true);
                     self.pause_settings_button.set_disabled(true);
                     self.pause_main_menu_button.set_disabled(true);
-                    gameplay_song.call(
-                        "set_parameter",
-                        &["MuffledOrNot".to_variant(), 1.0.to_variant()],
-                    );
+                    gameplay_song.set_parameter("MuffledOrNot", 1.0.to_variant());
                 }
             }
 
             if self.is_paused {
                 if self.Settings.bind().hurricane_mode {
                     if gameplay_song
-                        .call("get_parameter", &["WhichGameplaySong".to_variant()])
-                        .try_to::<GString>()
-                        .unwrap()
+                        .get_parameter("WhichGameplaySong")
+                        .to::<GString>()
                         != "Hurricane".to_godot()
                     {
-                        gameplay_song.call("stop", &[]);
-                        gameplay_song.call(
-                            "set_parameter",
-                            &["WhichGameplaySong".to_variant(), "Hurricane".to_variant()],
-                        ); // let's NEVER DO THIS MUCH INDENTATION holy fuck
-                        gameplay_song.call("play", &[false.to_variant()]);
-                    }
+                        gameplay_song.stop();
+                        gameplay_song.set_parameter("WhichGameplaySong", "Hurricane".to_variant());
+                        gameplay_song.play(Some(false));
+                    } // let's NEVER DO THIS MUCH INDENTATION again holy fuck
                 }
+                // else if gameplay_song
+                //     .call("get_parameter", &["WhichGameplaySong".to_variant()])
+                //     .try_to::<GString>()
+                //     .unwrap()
+                //     != "Normal".to_godot()
                 else if gameplay_song
-                    .call("get_parameter", &["WhichGameplaySong".to_variant()])
-                    .try_to::<GString>()
-                    .unwrap()
+                    .get_parameter("WhichGameplaySong")
+                    .to::<GString>()
                     != "Normal".to_godot()
                 {
-                    gameplay_song.call("stop", &[]);
-                    gameplay_song.call(
-                        "set_parameter",
-                        &["WhichGameplaySong".to_variant(), "Normal".to_variant()],
-                    );
-                    gameplay_song.call("play", &[false.to_variant()]);
+                    gameplay_song.stop();
+                    gameplay_song.set_parameter("WhichGameplaySong", "Normal".to_variant());
+                    gameplay_song.play(Some(false));
                 }
                 return;
             }
 
             if !self.is_game_over {
-                gameplay_song.call("play", &[false.to_variant()]);
+                gameplay_song.play(Some(false));
             }
         }
 
@@ -492,10 +483,10 @@ impl Main {
             .name("appear_game_over_text")
             .done();
         self.game_over_animation_timer.start();
-        self.MusicManager.bind_mut().gameplay.call(
-            "set_parameter",
-            &["NormalGameplaySongPitch".to_variant(), (-1.0).to_variant()],
-        );
+        self.MusicManager
+            .bind_mut()
+            .gameplay
+            .set_parameter("NormalGameplaySongPitch", (-1.0).to_variant());
         self.alive_to_dead_music_timer.start();
     }
 
@@ -528,34 +519,34 @@ impl Main {
     // signal connection
     #[func]
     fn _on_alive_to_dead_music_timer_timeout(&mut self) {
-        self.MusicManager.bind_mut().gameplay.call(
-            "set_parameter",
-            &["WhichGameplaySong".to_variant(), "GameOver".to_variant()],
-        );
+        self.MusicManager
+            .bind_mut()
+            .gameplay
+            .set_parameter("WhichGameplaySong", "GameOver".to_variant());
     }
 
     // signal connection
     #[func]
     fn _on_resume_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
 
         if self.Settings.bind().hurricane_mode {
-            self.MusicManager.bind_mut().gameplay.call(
-                "set_parameter",
-                &["WhichGameplaySong".to_variant(), "Hurricane".to_variant()],
-            );
+            self.MusicManager
+                .bind_mut()
+                .gameplay
+                .set_parameter("WhichGameplaySong", "Hurricane".to_variant());
         }
         else {
-            self.MusicManager.bind_mut().gameplay.call(
-                "set_parameter",
-                &["WhichGameplaySong".to_variant(), "Normal".to_variant()],
-            );
+            self.MusicManager
+                .bind_mut()
+                .gameplay
+                .set_parameter("WhichGameplaySong", "Normal".to_variant());
         }
 
-        self.MusicManager.bind_mut().gameplay.call(
-            "set_parameter",
-            &["MuffledOrNot".to_variant(), 1.0.to_variant()],
-        );
+        self.MusicManager
+            .bind_mut()
+            .gameplay
+            .set_parameter("MuffledOrNot", 1.0.to_variant());
 
         self.pause_ui.set_visible(false);
         self.resume_button.set_disabled(true);
@@ -567,7 +558,7 @@ impl Main {
     // signal connection
     #[func]
     fn _on_settings_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
         self.pause_label.set_visible(false);
         self.resume_button.set_visible(false);
         self.pause_settings_button.set_visible(false);
@@ -591,7 +582,7 @@ impl Main {
     // signal connection
     #[func]
     fn _on_try_again_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
         let game_scene = self.game_scene.clone();
         self.base_mut()
             .get_tree()
@@ -602,8 +593,8 @@ impl Main {
     // signal connection
     #[func]
     fn _on_main_menu_pressed(&mut self) {
-        self.MusicManager.bind_mut().gameplay.call("stop", &[]);
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.MusicManager.bind_mut().gameplay.stop();
+        self.SFXManager.bind_mut().click.play(None);
         let main_menu_scene = self.main_menu_scene.clone();
         self.base_mut()
             .get_tree()

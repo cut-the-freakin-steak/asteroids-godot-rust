@@ -116,7 +116,7 @@ impl IControl for MainMenu {
             .cast::<CanvasItem>();
         self.scene_root_node.init(current_scene);
 
-        self.MusicManager.bind_mut().title_theme.call("play", &[]);
+        self.MusicManager.bind_mut().title_theme.play(None);
 
         // signal stuff
         self.asteroid_timer
@@ -268,8 +268,8 @@ impl MainMenu {
 
     #[func]
     fn _on_play_pressed(&mut self) {
-        self.MusicManager.bind_mut().title_theme.call("stop", &[]);
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.MusicManager.bind_mut().title_theme.stop();
+        self.SFXManager.bind_mut().click.play(None);
         let mut scene_tree = self.base_mut().get_tree().unwrap();
         let game_scene = &self.game_scene;
         scene_tree.change_scene_to_packed(game_scene);
@@ -277,7 +277,7 @@ impl MainMenu {
 
     #[func]
     fn _on_settings_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
 
         // FIX: clanker told me to do it like this but idk man sus
         self.disappear_node(self.scene_root_node.clone());
@@ -298,7 +298,7 @@ impl MainMenu {
 
     #[func]
     fn _on_quit_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
         self.title.set_visible(false);
         self.play_button.set_visible(false);
         self.play_button.set_disabled(true);
@@ -321,14 +321,14 @@ impl MainMenu {
 
     #[func]
     fn _on_are_you_sure_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
         let mut os = Os::singleton();
         os.shell_open("https://i.ytimg.com/vi/YSWMYnuOImg/hqdefault.jpg");
     }
 
     #[func]
     fn _on_no_quit_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
         self.are_you_sure.set_visible(false);
         self.are_you_sure.set_disabled(true);
         self.yes_quit.set_visible(false);
@@ -351,13 +351,13 @@ impl MainMenu {
 
     #[func]
     fn _on_yes_quit_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
         self.base_mut().get_tree().unwrap().quit();
     }
 
     #[func]
     fn _on_tutorial_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
 
         self.disappear_node(self.scene_root_node.clone());
 
@@ -377,7 +377,7 @@ impl MainMenu {
 
     #[func]
     fn _on_credits_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
 
         self.disappear_node(self.scene_root_node.clone());
 

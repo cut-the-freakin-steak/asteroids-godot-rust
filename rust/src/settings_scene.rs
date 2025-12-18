@@ -262,7 +262,7 @@ impl SettingsScene {
     // NOTE: signal connections
     #[func]
     fn _on_return_pressed(&mut self) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
         self.exit_settings();
     }
 
@@ -270,7 +270,7 @@ impl SettingsScene {
     fn _on_v_sync_toggle_toggled(&mut self, toggled_on: bool) {
         use display_server as ds;
 
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
 
         if toggled_on {
             DisplayServer::singleton().window_set_vsync_mode(ds::VSyncMode::ENABLED);
@@ -286,7 +286,7 @@ impl SettingsScene {
 
     #[func]
     fn _on_screen_shake_toggle_toggled(&mut self, toggled_on: bool) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
 
         self.Settings.bind_mut().screen_shake_on = toggled_on;
 
@@ -295,7 +295,7 @@ impl SettingsScene {
 
     #[func]
     fn _on_hurricane_mode_toggle_toggled(&mut self, toggled_on: bool) {
-        self.SFXManager.bind_mut().click.call("play", &[]);
+        self.SFXManager.bind_mut().click.play(None);
 
         self.Settings.bind_mut().hurricane_mode = toggled_on;
 
