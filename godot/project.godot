@@ -12,13 +12,17 @@ config_version=5
 
 General/banks_path="res://fmod-stuff/Desktop"
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="asteroids-rust"
 run/main_scene="uid://ch3yqd5s4h35p"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="SteaksAsteroidsRemake"
-config/features=PackedStringArray("4.5", "Mobile")
+config/features=PackedStringArray("4.6", "Mobile")
 boot_splash/bg_color=Color(0.0156863, 0.0196078, 0.0745098, 1)
 boot_splash/show_image=false
 config/icon="uid://3ewtl5fn3kvg"
@@ -35,7 +39,7 @@ buses/default_bus_layout=""
 
 [autoload]
 
-PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_camera_manager.gd"
+PhantomCameraManager="*uid://duq6jhf6unyis"
 FmodManager="*res://addons/fmod/FmodManager.gd"
 BankLoaderFmod="*res://scenes/bank_loader_fmod.tscn"
 Settings="*res://scenes/global_settings_singleton.tscn"
