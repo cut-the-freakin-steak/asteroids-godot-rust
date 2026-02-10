@@ -1,0 +1,3 @@
+[submodule "rust/fmod-gdrust-bindings"]
+	path = rust/fmod-gdrust-bindings
+	url = git@github.com:cut-the-freakin-steak/fmod-gdrust-bindings.git
