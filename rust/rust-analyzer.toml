@@ -1,4 +1,4 @@
 [cargo]
 features = ["experimental-wasm", "lazy-function-tables"]
 
-extraEnv = { GODOT4_BIN = { value = "/Applications/Godot Engine v4.5.1.app/Contents/MacOS/Godot", relative = true, force = true } }
+extraEnv = { GODOT4_BIN = { value = "../../Godot Engine v4.5.1.app/Contents/MacOS/Godot", relative = true, force = true } }
