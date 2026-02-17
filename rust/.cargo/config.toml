@@ -1,5 +1,6 @@
 [env]
-GODOT4_BIN = { value = "../../Godot Engine v4.5.1.app/Contents/MacOS/Godot", relative = true, force = true }
+# symlink the actual binary for the godot version you need for no file extension
+GODOT4_BIN = { value = "../../godot_v4.5.1", relative = true, force = true }
 
 [target.wasm32-unknown-emscripten]
 rustflags = [

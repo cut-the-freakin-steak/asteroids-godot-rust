@@ -11,7 +11,6 @@ crate-type = [
 ] # Compile this crate to a dynamic C library.
 
 [dependencies]
-# godot = "0.4.5"
 godot = { version = "*", features = [
 	"api-custom",
 	"experimental-wasm",
