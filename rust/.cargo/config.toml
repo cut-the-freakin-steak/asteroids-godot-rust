@@ -1,6 +1,5 @@
 [env]
-# symlink the actual binary for the godot version you need for no file extension
-GODOT4_BIN = { value = "../../godot_v4.5.1", relative = true, force = true }
+GODOT4_BIN = { value = "../../godot", relative = true, force = true }
 
 [target.wasm32-unknown-emscripten]
 rustflags = [
